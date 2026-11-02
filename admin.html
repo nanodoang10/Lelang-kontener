@@ -1,0 +1,3523 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Lelang Kiriman — UNIFAM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#2A3180; --navy-tua:#1C2159; --navy-gelap:#161A45;
+  --teal:#1596A3; --teal-tua:#0E7A85;
+  --kertas:#EFF2F7; --panel:#FFFFFF; --tinta:#12172B; --muted:#5A6480;
+  --line:#DDE2EC; --line-tebal:#C3CAD9;
+  --amber:#D9820F; --red:#C8443A; --teal-hijau:#12876B;
+  --sky-deep:#2A3180; --sky:#3A43A8; --sky-light:#EFF2F7; --text:#12172B;
+  --disp:'Barlow Condensed',Arial,sans-serif;
+  --sans:'Barlow',Arial,sans-serif;
+  --mono:'IBM Plex Mono','Courier New',monospace;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{margin:0;background:var(--kertas);color:var(--tinta);
+  font-family:var(--sans);font-size:14.5px;line-height:1.5;min-height:100vh;padding-bottom:44px;}
+
+header{background:var(--navy);color:#fff;padding-bottom:16px;}
+.baris-judul{max-width:1000px;margin:0 auto;padding:15px 20px 0;
+  display:flex;align-items:center;gap:11px;}
+.logo-unifam{height:29px;width:auto;background:#fff;border-radius:5px;padding:3px 5px;}
+.eyebrow{font-family:var(--disp);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(255,255,255,.7);}
+h1{font-family:var(--disp);font-weight:700;font-size:33px;line-height:1;
+  margin:2px 0 0;letter-spacing:.01em;text-transform:uppercase;}
+.sub{max-width:1000px;margin:0 auto;padding:8px 20px 0;
+  color:rgba(255,255,255,.72);font-size:13.5px;line-height:1.5;}
+.btn-kunci{margin:0 0 0 auto;background:none;border:1px solid rgba(255,255,255,.3);
+  color:rgba(255,255,255,.85);font-family:var(--mono);font-size:11px;
+  padding:6px 12px;cursor:pointer;flex-shrink:0;}
+.btn-kunci:hover{background:rgba(255,255,255,.13);}
+
+#status-bar{max-width:1000px;margin:0 auto;padding:10px 20px 0;
+  font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+#status-bar.err{color:var(--red);}
+main{max-width:1000px;margin:0 auto;padding:6px 20px 0;}
+
+.section-title{display:flex;align-items:baseline;gap:12px;margin:24px 0 12px;}
+.section-title h2{font-family:var(--disp);font-weight:700;font-size:18px;
+  letter-spacing:.05em;text-transform:uppercase;margin:0;}
+.section-title small{color:var(--muted);font-family:var(--mono);font-size:11px;margin-left:auto;}
+
+.panel-box{background:var(--panel);border:1px solid var(--line);padding:17px;margin-bottom:8px;}
+
+.tautan-eks{display:flex;align-items:center;gap:13px;background:var(--panel);
+  border:1px solid var(--line);padding:14px 17px;margin:12px 0 0;
+  text-decoration:none;color:var(--tinta);border-left:3px solid var(--navy);}
+.tautan-eks:hover{border-color:var(--teal);border-left-color:var(--teal);}
+.tautan-eks .ikon{font-size:19px;}
+.tautan-eks b{display:block;font-family:var(--disp);font-size:16px;
+  letter-spacing:.05em;text-transform:uppercase;}
+.tautan-eks small{display:block;font-size:12px;color:var(--muted);margin-top:1px;}
+.tautan-eks span:nth-child(2){flex:1;}
+.tautan-eks .panah{color:var(--teal);font-size:19px;}
+
+textarea#paste-area{width:100%;min-height:88px;background:#FAFBFD;
+  border:1px solid var(--line-tebal);color:var(--tinta);padding:11px;
+  font-family:var(--mono);font-size:12.5px;resize:vertical;}
+textarea#paste-area:focus{outline:none;border-color:var(--navy);}
+.paste-hint{font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  margin:9px 0 13px;line-height:1.65;}
+.btn-primary{background:var(--navy);color:#fff;border:none;font-family:var(--disp);
+  font-weight:700;font-size:13.5px;letter-spacing:.09em;text-transform:uppercase;
+  padding:11px 20px;cursor:pointer;}
+.btn-primary:hover{background:var(--navy-tua);}
+.btn-primary:disabled{opacity:.5;cursor:default;}
+.btn-secondary{background:#fff;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.08em;
+  text-transform:uppercase;padding:10px 18px;cursor:pointer;}
+.btn-secondary:hover{border-color:var(--navy);color:var(--navy);}
+
+.baris-batas{display:flex;align-items:flex-end;gap:11px;flex-wrap:wrap;
+  background:#FAFBFD;border:1px solid var(--line);padding:13px 15px;margin:0 0 14px;}
+.baris-batas .kolom{flex:0 0 auto;}
+.baris-batas label,label{display:block;font-family:var(--disp);font-size:10px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.14em;
+  margin-bottom:5px;font-weight:600;}
+.baris-batas input,input{background:#fff;border:1px solid var(--line-tebal);
+  color:var(--tinta);padding:9px 11px;font-size:13.5px;font-family:var(--mono);min-height:42px;}
+.baris-batas input:focus,input:focus{outline:none;border-color:var(--navy);}
+.tutup-pukul{flex:1;min-width:190px;font-family:var(--mono);font-size:11.5px;
+  padding:9px 12px;line-height:1.5;}
+.tutup-pukul.baik{color:#0B6350;background:rgba(18,135,107,.08);border:1px solid rgba(18,135,107,.4);}
+.tutup-pukul.buruk{color:#A5352C;background:#FDEDEB;border:1px solid rgba(200,68,58,.4);}
+.tutup-pukul b{font-size:13px;}
+
+.preview-table{margin-top:14px;overflow-x:auto;}
+.preview-table table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.preview-table th{text-align:left;font-family:var(--disp);font-size:9.5px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.13em;padding:8px;border-bottom:1px solid var(--line);
+  white-space:nowrap;font-weight:600;background:#FAFBFD;}
+.preview-table td{padding:9px 8px;border-bottom:1px solid var(--line);}
+.preview-actions{margin-top:13px;display:flex;gap:10px;}
+
+.bar-hapus{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:13px;}
+.btn-siar{background:#1F9E52;border:none;color:#fff;font-family:var(--disp);
+  font-weight:700;font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;
+  padding:10px 16px;cursor:pointer;}
+.btn-siar:hover{background:#188443;}
+.btn-hapus{background:#fff;border:1px solid var(--red);color:var(--red);
+  font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.09em;
+  text-transform:uppercase;padding:10px 15px;cursor:pointer;}
+.btn-hapus:hover:not(:disabled){background:var(--red);color:#fff;}
+.btn-hapus:disabled{opacity:.4;cursor:default;border-color:var(--line-tebal);color:var(--muted);}
+.btn-hapus-semua{background:#fff;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.09em;
+  text-transform:uppercase;padding:10px 15px;cursor:pointer;}
+.btn-hapus-semua:hover{border-color:var(--red);color:var(--red);}
+.pilih-info{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+/* ---------- kartu docket ---------- */
+.grid{display:flex;flex-direction:column;gap:13px;}
+.card{background:var(--panel);border:1px solid var(--line);
+  box-shadow:0 1px 2px rgba(18,23,43,.05);overflow:hidden;}
+.card-head{padding:14px 16px 13px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;}
+.card-head.dengan-cek{grid-template-columns:auto 1fr auto;padding:0;align-items:stretch;}
+.card-head.dengan-cek > input.cek{display:none;}
+.punggung{background:var(--navy);width:36px;display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;padding:11px 0;gap:9px;}
+.punggung.tutup{background:var(--muted);}
+.punggung .cek{width:17px;height:17px;accent-color:#fff;cursor:pointer;}
+.punggung .kode{writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;
+  font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.2em;
+  text-transform:uppercase;white-space:nowrap;}
+.kepala-isi{padding:14px 16px 13px;min-width:0;}
+.cek-lelang{width:18px;height:18px;accent-color:var(--red);cursor:pointer;
+  flex-shrink:0;margin:15px 0 0 15px;}
+
+.route{font-family:var(--disp);font-weight:700;font-size:21px;line-height:1.05;
+  text-transform:uppercase;}
+.route .arrow{color:var(--teal);margin:0 7px;font-weight:500;}
+.route .dari{color:var(--muted);}
+.meta{font-size:12.5px;color:var(--muted);margin-top:7px;font-family:var(--mono);line-height:1.7;}
+.alamat-box{margin-top:9px;font-size:12px;color:var(--muted);
+  padding-left:10px;border-left:2px solid var(--line-tebal);line-height:1.55;}
+.alamat-box b{color:var(--tinta);font-weight:600;}
+.deadline-tag{font-family:var(--mono);font-size:11px;color:var(--amber);
+  border:1px solid rgba(217,130,15,.45);background:rgba(217,130,15,.07);
+  padding:4px 10px;white-space:nowrap;text-align:right;margin:14px 16px 0 0;line-height:1.6;}
+.deadline-tag.lewat{color:var(--red);border-color:rgba(200,68,58,.45);background:rgba(200,68,58,.07);}
+
+.card-body{border-top:1px dashed var(--line-tebal);padding:14px 16px 16px;
+  background:#FAFBFD;overflow-x:auto;}
+
+.rate-panel{font-family:var(--disp);font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);background:rgba(42,49,128,.05);
+  border:1px solid rgba(42,49,128,.16);padding:9px 13px;margin-bottom:12px;font-weight:600;}
+.rate-panel b{font-family:var(--mono);color:var(--navy);font-size:19px;letter-spacing:0;}
+.rate-panel .hemat{color:var(--teal-hijau);font-weight:700;margin-left:7px;font-family:var(--mono);letter-spacing:0;}
+.rate-panel .lebih{color:var(--red);font-weight:700;margin-left:7px;font-family:var(--mono);letter-spacing:0;}
+.rate-panel.rate-kosong{color:#8A5A0A;background:#FFF8EC;border-color:rgba(217,130,15,.4);}
+.rate-panel span[style]{font-family:var(--mono);letter-spacing:0;text-transform:none;font-weight:400;}
+
+.muat-input{margin-bottom:13px;}
+.muat-input input{max-width:200px;}
+
+table.bidtable{width:100%;border-collapse:collapse;font-size:13px;}
+table.bidtable th{text-align:left;font-family:var(--disp);font-size:9.5px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.13em;padding:8px 10px;
+  border-bottom:1px solid var(--line);white-space:nowrap;font-weight:600;}
+table.bidtable td{padding:9px 10px;border-bottom:1px solid var(--line);}
+table.bidtable tr:last-child td{border-bottom:none;}
+tr.termurah td{background:rgba(21,150,163,.07);color:#0B6E77;font-weight:600;}
+tr.termurah td:first-child{box-shadow:inset 3px 0 0 var(--teal);}
+.harga{font-family:var(--mono);}
+.badge-termurah{font-family:var(--mono);font-size:9.5px;background:var(--teal);
+  color:#fff;padding:2px 7px;margin-left:8px;font-weight:500;}
+.btn-pilih{background:var(--navy);color:#fff;border:none;font-family:var(--disp);
+  font-weight:700;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
+  padding:7px 13px;cursor:pointer;white-space:nowrap;}
+.btn-pilih:hover{background:var(--navy-tua);}
+.empty{color:var(--muted);font-size:12.5px;font-style:italic;padding:12px 0;}
+
+.pemenang-banner{font-family:var(--mono);font-size:12.5px;color:#fff;
+  background:var(--navy);padding:11px 14px;line-height:1.6;}
+.konfirmasi-ok{margin-top:10px;background:rgba(18,135,107,.08);
+  border:1px solid rgba(18,135,107,.4);padding:10px 13px;
+  font-family:var(--mono);font-size:11.5px;color:#0B6350;line-height:1.75;}
+.konfirmasi-nunggu{margin-top:10px;background:#FFF8EC;border:1px solid rgba(217,130,15,.4);
+  padding:10px 13px;font-family:var(--mono);font-size:11.5px;color:#8A5A0A;}
+.btn-wa-konfirmasi{display:block;text-align:center;margin-top:12px;background:#1F9E52;
+  color:#fff;text-decoration:none;font-family:var(--disp);font-weight:700;font-size:13.5px;
+  letter-spacing:.09em;text-transform:uppercase;padding:12px 18px;}
+.btn-wa-konfirmasi:hover{background:#188443;}
+.btn-batal-menang{width:100%;background:#fff;border:1px solid var(--line-tebal);
+  color:var(--muted);font-family:var(--disp);font-weight:600;font-size:12.5px;
+  letter-spacing:.08em;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:9px;}
+.btn-batal-menang:hover{border-color:var(--red);color:var(--red);}
+
+footer{max-width:1000px;margin:28px auto 0;padding:15px 20px;color:#8D96AC;
+  font-size:11.5px;font-family:var(--mono);border-top:1px solid var(--line-tebal);line-height:1.7;}
+
+/* ---------- jendela ---------- */
+.tirai{position:fixed;inset:0;background:rgba(18,23,43,.6);display:flex;
+  align-items:center;justify-content:center;padding:20px;z-index:150;}
+.jendela{background:var(--panel);padding:24px;max-width:400px;width:100%;
+  box-shadow:0 12px 34px rgba(18,23,43,.35);}
+.jendela h2{font-family:var(--disp);font-weight:700;font-size:21px;
+  text-transform:uppercase;letter-spacing:.04em;margin:0 0 5px;}
+.jendela .tanda-menang{display:inline-block;background:rgba(217,130,15,.14);color:#8A5A0A;
+  font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;padding:4px 10px;margin-bottom:11px;}
+.jendela .rinci{background:#FAFBFD;border:1px solid var(--line);padding:13px 15px;
+  margin:14px 0 16px;font-size:13px;line-height:1.75;}
+.jendela .rinci .label{font-family:var(--disp);font-size:10px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.14em;font-weight:600;}
+.jendela .rinci b{font-family:var(--mono);}
+.btn-wa-besar{display:block;text-align:center;background:#1F9E52;color:#fff;
+  text-decoration:none;font-family:var(--disp);font-weight:700;font-size:14px;
+  letter-spacing:.09em;text-transform:uppercase;padding:13px;}
+.btn-wa-besar:hover{background:#188443;}
+.btn-nanti{width:100%;background:#fff;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.08em;
+  text-transform:uppercase;padding:11px;cursor:pointer;margin-top:9px;}
+.btn-nanti:hover{border-color:var(--navy);color:var(--navy);}
+.peringatan-kecil{background:#FDEDEB;border:1px solid rgba(200,68,58,.4);color:#A5352C;
+  padding:10px 13px;font-size:12.5px;line-height:1.5;margin-bottom:12px;}
+.daftar-siar{max-height:300px;overflow-y:auto;border:1px solid var(--line);}
+.baris-siar{display:flex;align-items:center;gap:10px;padding:9px 11px;
+  border-bottom:1px solid var(--line);}
+.baris-siar:last-child{border-bottom:none;}
+.baris-siar.terkirim{background:rgba(18,135,107,.07);}
+.baris-siar.terkirim .nama-siar{color:var(--teal-hijau);}
+.baris-siar.terkirim .urut::after{content:' ✓';color:var(--teal-hijau);}
+.baris-siar .urut{font-family:var(--mono);font-size:10.5px;color:var(--muted);min-width:26px;}
+.baris-siar .nama-siar{flex:1;font-size:13.5px;font-weight:600;}
+.btn-wa-kecil{background:#1F9E52;color:#fff;text-decoration:none;font-family:var(--disp);
+  font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;padding:7px 15px;}
+.btn-wa-kecil:hover{background:#188443;}
+
+/* ---------- gerbang masuk ---------- */
+#gerbang{position:fixed;inset:0;z-index:200;display:flex;align-items:center;
+  justify-content:center;padding:20px;background:var(--navy);}
+#gerbang .kartu{background:var(--panel);padding:28px;max-width:370px;width:100%;
+  box-shadow:0 14px 44px rgba(18,23,43,.4);text-align:left;}
+#gerbang .logo-baris{display:flex;justify-content:center;margin-bottom:17px;}
+#gerbang .logo-baris img{height:50px;width:auto;}
+#gerbang h2{font-family:var(--disp);font-weight:700;font-size:23px;text-transform:uppercase;
+  letter-spacing:.04em;margin:0 0 5px;text-align:center;}
+#gerbang p.ket{font-size:12.5px;color:var(--muted);margin:0 0 19px;
+  line-height:1.55;text-align:center;}
+#gerbang input{width:100%;background:#fff;border:1px solid var(--line-tebal);
+  color:var(--tinta);padding:12px 13px;font-size:15px;font-family:var(--mono);}
+#gerbang input:focus{outline:none;border-color:var(--navy);}
+#gerbang .btn{width:100%;background:var(--navy);color:#fff;border:none;
+  font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.09em;
+  text-transform:uppercase;padding:13px;cursor:pointer;margin-top:17px;}
+#gerbang .btn:hover{background:var(--navy-tua);}
+#gerbang .btn:disabled{opacity:.55;cursor:default;}
+#gerbang .salah{background:#FDEDEB;border:1px solid rgba(200,68,58,.4);color:#A5352C;
+  padding:10px 12px;font-size:12.5px;margin-bottom:15px;line-height:1.5;}
+
+.peringatan-versi{max-width:1000px;margin:0 auto 14px;padding:12px 16px;background:#FDEDEB;
+  border:1px solid var(--red);color:#A5352C;font-size:13px;line-height:1.6;}
+.peringatan-versi b{display:block;font-family:var(--disp);font-size:15px;
+  letter-spacing:.05em;text-transform:uppercase;margin-bottom:3px;}
+.peringatan-versi code{font-family:var(--mono);background:rgba(200,68,58,.1);padding:1px 5px;}
+
+@media(max-width:620px){
+  h1{font-size:27px;}
+  .route{font-size:18px;}
+  .card-head{grid-template-columns:1fr;}
+  .card-head.dengan-cek{grid-template-columns:auto 1fr;}
+  .deadline-tag{margin:0 16px 13px;display:inline-block;}
+}
+
+/* ==================== TEMA & KERANGKA BERSAMA ==================== */
+:root{
+  --navy:#2A3180; --navy-tua:#1C2159; --navy-gelap:#161A45;
+  --teal:#1596A3; --teal-tua:#0E7A85;
+  --kertas:#EFF2F7; --panel:#FFFFFF; --kartu:#FFFFFF;
+  --tinta:#12172B; --text:#12172B; --muted:#5A6480;
+  --line:#DDE2EC; --line-tebal:#C3CAD9;
+  --amber:#D9820F; --red:#C8443A; --teal-hijau:#12876B;
+  /* nama lama dipetakan ke warna baru supaya halaman lama ikut berubah */
+  --sky-deep:#2A3180; --sky:#3A43A8; --sky-light:#EFF2F7;
+  --disp:'Barlow Condensed',Arial,sans-serif;
+  --sans:'Barlow',Arial,sans-serif;
+  --body:'Barlow',Arial,sans-serif;
+  --mono:'IBM Plex Mono','Courier New',monospace;
+}
+body{background:var(--kertas)!important;color:var(--tinta);
+  font-family:var(--sans);font-size:14.5px;line-height:1.5;margin:0;padding:0!important;}
+
+.rangka{display:grid;grid-template-columns:228px 1fr;min-height:100vh;}
+.sisi{background:var(--navy-gelap);color:#fff;display:flex;flex-direction:column;}
+.sisi-kop{display:flex;align-items:center;gap:10px;padding:15px 16px;
+  border-bottom:1px solid rgba(255,255,255,.1);}
+.sisi-kop img{height:32px;width:auto;background:#fff;border-radius:5px;padding:3px 5px;}
+.sisi-kop .t{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.06em;
+  text-transform:uppercase;line-height:1.05;}
+.sisi-kop .s{font-family:var(--mono);font-size:9.5px;color:rgba(255,255,255,.5);letter-spacing:.04em;}
+.sisi nav{padding:10px 0;flex:1;}
+.sisi .grup{font-family:var(--disp);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);padding:14px 18px 6px;}
+.sisi nav a{display:flex;align-items:center;gap:11px;padding:9px 18px;
+  color:rgba(255,255,255,.76);text-decoration:none;font-size:14px;
+  border-left:3px solid transparent;}
+.sisi nav a:hover{background:rgba(255,255,255,.06);color:#fff;}
+.sisi nav a.aktif{background:var(--navy);color:#fff;border-left-color:var(--teal);font-weight:600;}
+.sisi nav a .ik{width:17px;text-align:center;opacity:.85;}
+.sisi-kaki{padding:13px 18px;border-top:1px solid rgba(255,255,255,.1);
+  font-family:var(--mono);font-size:10.5px;color:rgba(255,255,255,.45);line-height:1.7;}
+
+.utama{min-width:0;display:flex;flex-direction:column;}
+.bar-atas{background:#fff;border-bottom:1px solid var(--line);padding:11px 22px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
+.bar-atas .menu{display:none;background:none;border:1px solid var(--line);
+  padding:6px 11px;cursor:pointer;font-size:16px;line-height:1;}
+.bar-atas .tajuk{flex:1;min-width:0;}
+.bar-atas h1{font-family:var(--disp);font-weight:700;font-size:24px;text-transform:uppercase;
+  letter-spacing:.03em;margin:0;line-height:1.1;color:var(--tinta);}
+.bar-atas .ket{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.bar-atas .aksi{display:flex;align-items:center;gap:9px;}
+.bar-atas .aku{display:flex;align-items:center;gap:9px;}
+.bar-atas .aku .bulat{width:32px;height:32px;background:var(--navy);color:#fff;display:flex;
+  align-items:center;justify-content:center;font-family:var(--disp);font-weight:700;font-size:13px;}
+.bar-atas .aku .n{font-weight:600;font-size:13.5px;line-height:1.15;}
+.bar-atas .aku .r{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.btn-kunci{background:none;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--mono);font-size:11px;padding:6px 12px;cursor:pointer;}
+.btn-kunci:hover{border-color:var(--red);color:var(--red);}
+
+.isi{padding:18px 22px 44px;}
+.isi > main{max-width:none!important;margin:0!important;padding:0!important;}
+.isi > footer{max-width:none!important;margin:26px 0 0!important;padding:15px 0 0!important;
+  border-top:1px solid var(--line-tebal);color:#8D96AC;font-size:11.5px;font-family:var(--mono);line-height:1.7;}
+.isi > #status-bar{max-width:none!important;margin:0 0 12px!important;padding:0!important;
+  font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+.isi > #status-bar.err{color:var(--red);}
+.isi > #status-bar.ok{color:var(--teal-hijau);}
+.isi .peringatan-versi{max-width:none;margin:0 0 14px;}
+
+/* sudut siku & font di seluruh komponen umum */
+.panel-box,.kotak-tabel,.card,.kartu-eks,.kartu-angka,.panel,.jendela,
+.kotak-masuk,#gerbang .kartu,.lapor,.pesan-salah,.empty-state{border-radius:0!important;}
+h1,h2,h3{font-family:var(--disp);letter-spacing:.03em;}
+.section-title h2{font-family:var(--disp);font-weight:700;font-size:18px;
+  letter-spacing:.05em;text-transform:uppercase;margin:0;}
+.balik{display:none!important;}
+
+@media(max-width:900px){
+  .rangka{grid-template-columns:1fr;}
+  .sisi{position:fixed;inset:0 auto 0 0;width:228px;z-index:120;
+    transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 20px rgba(18,23,43,.3);}
+  .sisi.buka{transform:none;}
+  .bar-atas .menu{display:block;}
+  .bar-atas h1{font-size:20px;}
+  .isi{padding:15px 16px 40px;}
+}
+
+
+.btn-rate{background:#fff;border:1px solid var(--navy);color:var(--navy);
+  font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.09em;
+  text-transform:uppercase;padding:10px 15px;cursor:pointer;}
+.btn-rate:hover{background:var(--navy);color:#fff;}
+.jendela.lebar{max-width:620px;}
+.tabel-usul{max-height:340px;overflow:auto;border:1px solid var(--line);margin-bottom:14px;}
+.tabel-usul table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.tabel-usul th{position:sticky;top:0;background:#FAFBFD;text-align:left;
+  font-family:var(--disp);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--line);
+  font-weight:600;white-space:nowrap;}
+.tabel-usul td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.tabel-usul tr:last-child td{border-bottom:none;}
+.tabel-usul .cek-usul{width:17px;height:17px;accent-color:var(--navy);cursor:pointer;}
+.tabel-usul .kanan{text-align:right;font-family:var(--mono);white-space:nowrap;}
+.tag-turun{font-family:var(--mono);font-size:10px;color:#0B6350;
+  background:rgba(18,135,107,.12);padding:2px 7px;white-space:nowrap;}
+.tag-naik{font-family:var(--mono);font-size:10px;color:#A5352C;
+  background:rgba(200,68,58,.1);padding:2px 7px;white-space:nowrap;}
+.tag-baru{font-family:var(--mono);font-size:10px;color:var(--navy);
+  background:rgba(42,49,128,.1);padding:2px 7px;white-space:nowrap;}
+.usul-kop{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap;}
+.usul-kop .pilih-cepat{background:none;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--mono);font-size:11px;padding:5px 10px;cursor:pointer;}
+.usul-kop .pilih-cepat:hover{border-color:var(--navy);color:var(--navy);}
+
+.kotak-tutup{background:#FFF8EC;border:1px solid rgba(217,130,15,.45);
+  padding:12px 14px;margin-bottom:13px;}
+.kt-teks{font-size:12.5px;color:#7A4E08;line-height:1.6;}
+.kt-teks b{display:block;font-family:var(--disp);font-size:14.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:#5E3C06;margin-bottom:3px;}
+.kt-isian{display:flex;align-items:flex-end;gap:9px;flex-wrap:wrap;margin-top:11px;}
+.kt-isian label{display:block;font-family:var(--disp);font-size:9.5px;color:#8A5A0A;
+  text-transform:uppercase;letter-spacing:.13em;margin-bottom:4px;font-weight:600;}
+.kt-isian input{background:#fff;border:1px solid rgba(217,130,15,.5);padding:8px 10px;
+  font-family:var(--mono);font-size:13px;min-height:38px;}
+.btn-buka{background:var(--amber);color:#3D2607;border:none;font-family:var(--disp);
+  font-weight:700;font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;
+  padding:10px 16px;cursor:pointer;}
+.btn-buka:hover{background:#B76D0B;color:#fff;}
+
+.banding-harga{background:#FAFBFD;border:1px solid var(--line);padding:13px 15px;margin-top:14px;}
+.bh-baris{display:flex;align-items:baseline;gap:11px;padding:5px 0;}
+.bh-l{font-family:var(--disp);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;min-width:92px;}
+.bh-n{font-family:var(--mono);font-size:16px;font-weight:600;flex:1;}
+.bh-e{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.bh-baris.pilih .bh-n{color:var(--navy);}
+.bh-selisih{margin-top:8px;padding-top:9px;border-top:1px dashed var(--line-tebal);
+  font-family:var(--mono);font-size:12px;color:var(--red);}
+.bh-selisih b{font-size:13.5px;}
+.kotak-approval{background:#FFF8EC;border:1px solid rgba(217,130,15,.45);padding:11px 13px;
+  margin-bottom:10px;font-size:12.5px;color:#7A4E08;line-height:1.6;}
+.kotak-approval b{display:block;font-family:var(--disp);font-size:14px;letter-spacing:.05em;
+  text-transform:uppercase;color:#5E3C06;margin-bottom:3px;}
+.btn-wa-approval{display:block;text-align:center;background:var(--amber);color:#3D2607;
+  text-decoration:none;font-family:var(--disp);font-weight:700;font-size:13.5px;
+  letter-spacing:.09em;text-transform:uppercase;padding:12px;margin-bottom:9px;}
+.btn-wa-approval:hover{background:#B76D0B;color:#fff;}
+
+.ket-grup{font-family:var(--mono);font-size:10.5px;color:var(--muted);
+  line-height:1.6;margin:-4px 0 9px;text-align:center;}
+
+.ket-gabung{background:rgba(21,150,163,.08);border:1px solid rgba(21,150,163,.4);
+  padding:10px 13px;margin-bottom:12px;font-size:12.5px;color:#0B6E77;line-height:1.6;}
+.cap-jumlah{font-family:var(--mono);background:var(--teal);color:#fff;padding:2px 8px;font-size:11.5px;}
+
+.panel-order{background:#FAFBFD;border:1px solid var(--line);margin-top:11px;}
+.po-kop{display:flex;align-items:baseline;gap:10px;padding:10px 13px;
+  border-bottom:1px solid var(--line);flex-wrap:wrap;}
+.po-jdl{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;}
+.po-ket{font-family:var(--mono);font-size:10.5px;color:var(--muted);}
+.po-kosong{padding:12px 13px;font-size:12.5px;color:var(--muted);line-height:1.6;font-style:italic;}
+table.tabel-order{width:100%;border-collapse:collapse;font-size:12.5px;}
+table.tabel-order th{font-family:var(--disp);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);text-align:left;padding:7px 11px;
+  border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap;}
+table.tabel-order td{padding:8px 11px;border-bottom:1px solid var(--line);}
+table.tabel-order tr:last-child td{border-bottom:none;}
+table.tabel-order td.kanan{text-align:right;white-space:nowrap;}
+.pil-ok{font-family:var(--mono);font-size:9.5px;padding:2px 8px;
+  background:rgba(18,135,107,.13);color:#0B6350;white-space:nowrap;}
+.pil-nunggu{font-family:var(--mono);font-size:9.5px;padding:2px 8px;
+  background:rgba(217,130,15,.14);color:#8A5A0A;white-space:nowrap;}
+.tautan-kecil{font-family:var(--mono);font-size:10.5px;color:#1F9E52;
+  text-decoration:underline;margin-right:9px;}
+.btn-x{background:none;border:1px solid var(--line-tebal);color:var(--muted);
+  width:22px;height:22px;line-height:1;cursor:pointer;font-size:14px;}
+.btn-x:hover{border-color:var(--red);color:var(--red);}
+.btn-order{width:100%;background:var(--navy);color:#fff;border:none;
+  font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.09em;
+  text-transform:uppercase;padding:11px;cursor:pointer;}
+.btn-order:hover{background:var(--navy-tua);}
+
+.btn-segar{background:none;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--mono);font-size:11px;padding:6px 12px;cursor:pointer;}
+.btn-segar:hover{border-color:var(--navy);color:var(--navy);}
+.btn-segar:disabled{opacity:.5;cursor:default;}
+
+.tab-admin{display:flex;background:var(--panel);border:1px solid var(--line);
+  width:fit-content;margin:4px 0 16px;}
+.tab-admin button{background:transparent;border:none;padding:11px 20px;
+  font-family:var(--disp);font-weight:600;font-size:13.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);cursor:pointer;white-space:nowrap;
+  display:flex;align-items:center;gap:8px;}
+.tab-admin button.aktif{background:var(--navy);color:#fff;}
+.tab-admin button:not(.aktif):hover{background:#F4F6FA;color:var(--tinta);}
+.tab-admin .hit{font-family:var(--mono);font-size:10.5px;background:rgba(0,0,0,.09);
+  padding:1px 7px;font-weight:500;}
+.tab-admin button.aktif .hit{background:rgba(255,255,255,.22);}
+.sembunyi{display:none !important;}
+
+.aksi-bid{white-space:nowrap;display:flex;gap:6px;justify-content:flex-end;}
+.btn-nego{background:#fff;border:1px solid var(--amber);color:#8A5A0A;
+  font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.09em;
+  text-transform:uppercase;padding:7px 12px;cursor:pointer;}
+.btn-nego:hover{background:var(--amber);color:#fff;}
+
+.cap-lama{font-family:var(--mono);font-size:9.5px;padding:2px 7px;
+  background:#F4F6FA;border:1px solid var(--line-tebal);color:var(--muted);white-space:nowrap;}
+
+.baris-rinci td{background:#F4F7FB;padding:10px 12px 11px !important;}
+.rinci-kisi{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px 16px;}
+.rinci-kisi .rl{display:block;font-family:var(--disp);font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);font-weight:600;}
+.rinci-kisi .rv{display:block;font-size:13px;font-weight:600;line-height:1.35;}
+.rinci-kisi .rv.mono{font-family:var(--mono);font-weight:500;font-size:12.5px;}
+.rinci-catatan{margin-top:9px;font-size:12px;color:var(--muted);line-height:1.55;
+  padding-left:9px;border-left:2px solid var(--line-tebal);}
+.rinci-waktu{margin-top:8px;font-family:var(--mono);font-size:10px;color:#8D96AC;}
+
+.btn-combo{background:#fff;border:1px solid var(--teal);color:var(--teal-tua);
+  font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.09em;
+  text-transform:uppercase;padding:10px 15px;cursor:pointer;}
+.btn-combo:hover:not(:disabled){background:var(--teal);color:#fff;}
+.btn-combo:disabled{opacity:.4;cursor:default;border-color:var(--line-tebal);color:var(--muted);}
+.cap-combo{font-family:var(--mono);font-size:9.5px;background:var(--teal-tua);color:#fff;
+  padding:2px 8px;margin-left:8px;white-space:nowrap;}
+.combo-bubar{background:none;border:none;color:var(--muted);font-family:var(--mono);
+  font-size:10.5px;text-decoration:underline;cursor:pointer;padding:0;margin-left:9px;}
+.combo-bubar:hover{color:var(--red);}
+
+.combo-baris{font-family:var(--mono);font-size:10.5px;color:var(--teal-tua);margin-top:5px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:2px;}
+
+.btn-mini{background:#fff;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--mono);font-size:10px;padding:4px 9px;cursor:pointer;margin-left:5px;}
+.btn-mini:hover{border-color:var(--navy);color:var(--navy);}
+.btn-mini.merah:hover{border-color:var(--red);color:var(--red);}
+.pil-batal{font-family:var(--mono);font-size:9.5px;padding:2px 8px;
+  background:#F1F3F7;border:1px solid var(--line-tebal);color:var(--muted);white-space:nowrap;}
+.baris-batal td{opacity:.55;text-decoration:line-through;}
+.baris-batal td:last-child,.baris-batal td:nth-child(4){text-decoration:none;}
+
+.bar-tanggal{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--panel);border:1px solid var(--line);padding:11px 13px;margin-bottom:14px;}
+.bar-tanggal .bt-l{font-family:var(--disp);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);font-weight:600;}
+.pilih-tgl{background:#fff;border:1px solid var(--line-tebal);color:var(--tinta);
+  font-family:var(--mono);font-size:13px;padding:9px 11px;min-width:230px;cursor:pointer;}
+.pilih-tgl:focus{outline:none;border-color:var(--navy);}
+.btn-reset-tgl{background:none;border:1px solid var(--line-tebal);color:var(--muted);
+  font-family:var(--mono);font-size:11px;padding:7px 11px;cursor:pointer;}
+.btn-reset-tgl:hover{border-color:var(--navy);color:var(--navy);}
+
+.btn-mini.biru{border-color:var(--navy);color:var(--navy);}
+.btn-mini.biru:hover{background:var(--navy);color:#fff;}
+
+.ket-kecil{font-family:var(--mono);font-size:9.5px;color:var(--muted);}
+.ket-ada{font-family:var(--mono);font-size:9.5px;color:#8A5A0A;
+  background:rgba(217,130,15,.14);padding:2px 7px;margin-right:7px;white-space:nowrap;}
+
+.baris-juara td{background:#FFFBEF;}
+.pil-juara{font-family:var(--mono);font-size:9px;background:#B8860B;color:#fff;
+  padding:1px 6px;margin-left:7px;white-space:nowrap;}
+.pil-menantang{font-family:var(--mono);font-size:9px;background:var(--red);color:#fff;
+  padding:1px 6px;margin-left:7px;white-space:nowrap;}
+.beda-kunci{font-family:var(--mono);font-size:9.5px;color:var(--muted);}
+.alasan-naik{font-size:11px;color:#8A5A0A;font-style:italic;}
+.kotak-tantang{background:#FDEDEB;border:1px solid rgba(200,68,58,.45);padding:12px 14px;margin-bottom:12px;}
+.cek-order{cursor:pointer;}
+.btn-ubah-harga{background:none;border:1px solid var(--line-tebal,#C3CAD9);color:var(--muted,#5A6480);
+  font-family:var(--mono,monospace);font-size:9.5px;padding:1px 6px;margin-left:6px;cursor:pointer;
+  vertical-align:middle;}
+.btn-ubah-harga:hover{border-color:var(--navy,#2A3180);color:var(--navy,#2A3180);}
+.lencana-combo{font-family:var(--mono,monospace);font-size:8.5px;letter-spacing:.06em;
+  background:var(--teal,#1596A3);color:#fff;padding:1px 6px;margin-left:6px;white-space:nowrap;}
+.btn-bubar-combo{background:none;border:none;color:var(--muted);font-size:13px;line-height:1;
+  cursor:pointer;padding:0 2px;margin-left:2px;vertical-align:middle;}
+.btn-bubar-combo:hover{color:var(--red,#C8443A);}
+.bar-combo-order{position:fixed;left:50%;bottom:-70px;transform:translateX(-50%);
+  background:var(--navy,#2A3180);color:#fff;padding:12px 18px;border-radius:8px;
+  display:flex;align-items:center;gap:11px;box-shadow:0 6px 22px rgba(18,23,43,.32);
+  z-index:80;transition:bottom .18s ease;font-size:13px;}
+.bar-combo-order.tampil{bottom:22px;}
+.bar-combo-order button{font-family:var(--disp,inherit);font-weight:700;font-size:11.5px;
+  letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;cursor:pointer;border-radius:4px;}
+.bar-combo-order button.btn-k.putih{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;}
+.bar-combo-order button.btn-k.hijau{background:#12876B;border:1px solid #12876B;color:#fff;}
+.bar-combo-order button.btn-k.hijau:disabled{opacity:.45;cursor:default;}
+.kotak-riwayat{background:#F4FBF6;border:1px solid rgba(18,135,107,.4);padding:12px 14px;margin-bottom:12px;}
+.kotak-riwayat .kr-t{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:#0B6350;margin-bottom:7px;}
+.kotak-riwayat .kr-isi{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:9px;}
+.kotak-riwayat .kr-eks{font-weight:600;font-size:14px;}
+.kotak-riwayat .kr-harga{font-family:var(--mono,monospace);font-size:15px;font-weight:600;color:#0B6350;}
+.kotak-riwayat .kr-tgl{font-size:11.5px;color:var(--muted);}
+.btn-riwayat{background:#12876B;color:#fff;border:none;font-family:var(--disp);font-weight:700;
+  font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;padding:9px 15px;cursor:pointer;}
+.btn-riwayat:hover{background:#0B6350;}
+.kotak-riwayat .kr-ket{font-size:11px;color:#3E6F5F;line-height:1.6;margin-top:8px;}
+.kt-t{font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.05em;
+  text-transform:uppercase;color:#A5352C;}
+.kt-k{font-size:12.5px;color:#8A3A32;line-height:1.7;margin-top:5px;}
+.btn-tantang{display:inline-block;margin-top:10px;background:#1F9E52;color:#fff;
+  font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.08em;
+  text-transform:uppercase;padding:9px 15px;text-decoration:none;}
+.btn-tantang:hover{background:#17803F;}
+
+.langkah-order{background:#FFF8EC;border:1px solid rgba(217,130,15,.45);padding:12px 14px;
+  margin:13px 0;font-size:12.5px;color:#7A4E08;line-height:1.7;}
+.langkah-order b{color:#5E3C06;}
+.langkah-order > b:first-child{display:block;font-family:var(--disp);font-size:14.5px;
+  letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px;}
+.tanpa-order{background:#FFF8EC;border:1px solid rgba(217,130,15,.5);padding:11px 13px;
+  margin-bottom:12px;font-size:12.5px;color:#7A4E08;line-height:1.65;}
+.tanpa-order b{display:block;font-family:var(--disp);font-size:14px;letter-spacing:.05em;
+  text-transform:uppercase;color:#5E3C06;margin-bottom:3px;}
+
+.tab-admin .hit.perlu{background:var(--amber);color:#fff;}
+/* ===== v110: alihkan pemenang + approval ===== */
+.btn-alih{width:100%;background:#fff;border:1px solid var(--amber);color:#8A5A0A;font-family:var(--disp);font-weight:700;
+  font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:9px;}
+.btn-alih:hover{background:#FFF4E5;}
+.btn-order:disabled{background:#B8C0D0;cursor:not-allowed;}
+.tunggu-acc{background:#FFF4E5;border:1px solid rgba(217,130,15,.55);padding:11px 13px;margin:0 0 10px;font-size:13px;line-height:1.55;color:#6B4206;}
+.tunggu-acc b.jdl{display:block;font-family:var(--disp);font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#8A5A0A;margin-bottom:3px;}
+.tunggu-acc .tombol2{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;}
+.tunggu-acc .tombol2 a,.tunggu-acc .tombol2 button{flex:1;min-width:140px;text-align:center;font-family:var(--disp);font-weight:700;font-size:13px;
+  letter-spacing:.06em;text-transform:uppercase;padding:10px;cursor:pointer;text-decoration:none;border:none;}
+.tunggu-acc .wa{background:var(--amber);color:#3D2607;}
+.tunggu-acc .ok{background:var(--teal);color:#fff;}
+.acc-ok{font-size:12px;color:#0B6350;background:rgba(18,135,107,.08);border:1px solid rgba(18,135,107,.3);padding:6px 10px;margin:0 0 10px;}
+.pilih-alih{border:1px solid var(--line);margin:12px 0;max-height:260px;overflow:auto;}
+.pilih-alih label{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px;line-height:1.45;
+  text-transform:none!important;letter-spacing:normal!important;font-family:var(--sans)!important;font-weight:400!important;color:var(--text)!important;margin:0!important;}
+#alih-alasan{width:100%;box-sizing:border-box;}
+.pilih-alih label:last-child{border-bottom:none;}
+.pilih-alih label.lama{background:#F4F5F8;color:var(--muted);cursor:not-allowed;}
+.pilih-alih input{margin-top:3px;accent-color:var(--navy);}
+.pilih-alih .nm{font-weight:700;}
+.pilih-alih .hg{font-family:var(--mono);}
+.pilih-alih .kp{font-size:11.5px;color:var(--muted);}
+.jendela.lebar{max-width:460px;}
+/* tabel lebar digeser di dalam kotaknya sendiri, bukan melebarkan seluruh halaman di HP */
+.gulir{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+.btn-mini.oranye{background:#fff;border:1px solid var(--amber);color:#8A5A0A;}
+.btn-mini.oranye:hover{background:#FFF4E5;}
+.btn-mini.hijau{background:var(--teal);border:1px solid var(--teal);color:#fff;}
+.pil-acc{display:inline-block;background:#FFF4E5;border:1px solid rgba(217,130,15,.55);color:#8A5A0A;font-family:var(--disp);
+  font-weight:700;font-size:10.5px;letter-spacing:.08em;padding:1px 6px;margin-left:4px;white-space:nowrap;}
+
+/* v112: pengajuan harga dari ekspedisi */
+.pj-kartu{background:#fff;border:1px solid var(--line);border-left:5px solid var(--amber);padding:13px 15px;margin-bottom:10px}
+.pj-kartu.putus-setuju{border-left-color:#12876B}.pj-kartu.putus-tolak{border-left-color:var(--red)}
+.pj-kartu .jdl{font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:.04em;color:#8A5A0A;text-transform:uppercase}
+.pj-kartu .baris{display:flex;gap:18px;flex-wrap:wrap;margin:8px 0;font-size:13.5px}
+.pj-kartu .baris span{display:block;font-family:var(--disp);font-size:10.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.pj-kartu .baris b{font-family:var(--mono)}
+.pj-kartu .alasan{font-size:13px;background:#FAFBFD;border:1px solid var(--line);padding:7px 10px;margin-bottom:10px}
+.pj-tb{display:flex;gap:8px;flex-wrap:wrap}
+.pj-tb button,.pj-tb a{font-family:var(--disp);font-weight:700;font-size:13.5px;letter-spacing:.05em;padding:10px 13px;border:1px solid var(--line);
+  background:#fff;color:var(--muted);cursor:pointer;flex:1;min-width:170px;text-align:center;text-decoration:none}
+.pj-tb .setuju{background:#1596A3;border-color:#1596A3;color:#fff}
+.pj-tb .alih{border-color:var(--amber);color:#8A5A0A}
+.pj-tb .wa{background:#1F9E52;border-color:#1F9E52;color:#fff}
+.pj-tb button:disabled{opacity:.5;cursor:default}
+.pj-ket{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.55}
+details.pj-riwayat{margin:4px 0 10px;font-size:13px}
+details.pj-riwayat summary{cursor:pointer;color:var(--muted);font-family:var(--disp);letter-spacing:.06em;text-transform:uppercase;font-size:12px;padding:4px 0}
+
+/* =====================================================================
+   v113 — TAMPILAN BARU (hanya gaya; data & cara simpan tidak berubah)
+   ===================================================================== */
+body{background:#F3F5F9!important;}
+.sisi{background:#1C2159;}
+.sisi-kop{padding:18px 16px;}
+.sisi-kop img{border-radius:9px;height:34px;}
+.sisi nav{padding:10px 10px;}
+.sisi .grup{padding:16px 10px 6px;}
+.sisi nav a{border-left:none;border-radius:10px;padding:10px 12px;margin-bottom:2px;font-size:14.5px;}
+.sisi nav a.aktif{background:rgba(255,255,255,.13);}
+.sisi nav a .ik{width:18px;display:flex;align-items:center;justify-content:center;opacity:1;}
+.bar-atas{padding:14px 26px;}
+.bar-atas h1{text-transform:none;font-size:27px;letter-spacing:.01em;}
+.bar-atas .menu{border-radius:10px;padding:8px 10px;color:var(--navy);}
+.bar-atas .aku .bulat{border-radius:50%;}
+.btn-segar,.btn-kunci{border-radius:10px!important;min-height:38px;}
+main,#status-bar{max-width:1180px;}
+main{padding-left:26px;padding-right:26px;}
+#status-bar{padding-left:26px;padding-right:26px;}
+
+.tindakan{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:14px 0 6px;}
+.tk{background:#fff;border:1px solid #E1E5EE;border-radius:16px;padding:14px 16px;text-align:left;cursor:pointer;
+  display:flex;flex-direction:column;gap:3px;font-family:var(--sans);color:var(--tinta);min-height:104px;}
+.tk:hover{border-color:var(--navy);}
+.tk b{font-family:var(--mono);font-size:28px;font-weight:600;line-height:1.1;}
+.tk .tk-j{font-size:13px;font-weight:700;color:#3A4360;}
+.tk .tk-k{font-size:12.5px;color:var(--muted);line-height:1.35;}
+.tk.oranye{border-color:#F0C98A;background:#FFFBF4;} .tk.oranye .tk-j{color:#8A5A0A;}
+.tk.merah{border-color:#F3C4BF;background:#FFF8F7;} .tk.merah .tk-j{color:#A9322A;}
+.tk.biru{border-color:#C9CEEB;background:#F7F8FD;} .tk.biru .tk-j{color:var(--navy);}
+
+.tab-admin{border:none;background:transparent;gap:8px;margin:20px 0 6px;flex-wrap:wrap;}
+.tab-admin button{border:1px solid var(--line-tebal);border-radius:22px;background:#fff;padding:10px 18px;
+  font-family:var(--sans);font-weight:600;font-size:14.5px;letter-spacing:0;text-transform:none;color:#3A4360;}
+.tab-admin button.aktif{background:var(--navy);border-color:var(--navy);color:#fff;}
+.tab-admin .hit{border-radius:9px;}
+.section-title h2{text-transform:none;letter-spacing:.01em;font-size:22px;}
+.panel-box,.card,.pj-kartu,.kotak-tabel,.jendela,.peringatan-versi,.empty,#preview-wrap > div{border-radius:16px;}
+.card{border-color:#E1E5EE;overflow:hidden;}
+.card-body{background:#fff;}
+.pj-kartu{border-left-width:1px;border-color:#F0C98A;}
+.pj-kartu.putus-setuju{border-color:#BFE3DA;} .pj-kartu.putus-tolak{border-color:#F3C4BF;}
+.pj-tb button,.pj-tb a{border-radius:11px;}
+input,textarea,select{border-radius:10px!important;}
+button{border-radius:10px;}
+.btn-primary{border-radius:12px;text-transform:none;letter-spacing:.02em;font-family:var(--sans);font-size:15px;}
+.btn-siar,.btn-rate,.btn-combo,.btn-hapus,.btn-hapus-semua,.btn-buka,.btn-nego,.btn-wa-kecil,.btn-wa-approval{border-radius:10px!important;}
+.tirai .jendela{border-radius:18px;}
+table{border-radius:12px;}
+footer{max-width:1180px;}
+.bar-hapus button{text-transform:none!important;letter-spacing:.01em!important;font-family:var(--sans)!important;font-size:14px!important;}
+@media (max-width:860px){
+  main,#status-bar{padding-left:14px;padding-right:14px;}
+  .bar-atas{padding:12px 14px;}
+  .tindakan{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .tk:last-child{grid-column:1 / -1;min-height:auto;}
+}
+
+/* ===== v113b: mengikuti contoh tampilan ===== */
+.sembunyi{display:none!important;}
+.sisi nav{padding-top:14px;}
+.sisi nav a .nb{margin-left:auto;font-family:var(--mono);font-size:11.5px;background:rgba(255,255,255,.16);border-radius:9px;padding:0 8px;}
+.sisi nav a .nb.oranye{background:var(--amber);color:#fff;}
+.bar-atas h1{font-size:30px;}
+.bar-atas .aksi{flex-wrap:wrap;gap:10px;}
+.cari-admin{display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line-tebal);
+  background:#fff;min-width:250px;margin:0;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--muted);}
+.cari-admin input{border:none!important;outline:none;box-shadow:none!important;padding:0;min-height:0;height:40px;font-family:var(--sans);font-size:14.5px;background:transparent;}
+.btn-baru{height:44px;padding:0 18px;border-radius:12px;border:none;background:var(--navy);color:#fff;font-family:var(--sans);
+  font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:8px;cursor:pointer;}
+.btn-baru:hover{background:var(--navy-tua);}
+.menu-lain{position:relative;}
+.menu-lain summary{list-style:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line-tebal);background:#fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--navy);}
+.menu-lain summary::-webkit-details-marker{display:none;}
+.ml-isi{position:absolute;right:0;top:50px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(18,23,43,.15);
+  padding:6px;display:flex;flex-direction:column;min-width:220px;z-index:60;}
+.ml-isi button{background:none;border:none;text-align:left;padding:10px 12px;font-family:var(--sans);font-size:14px;cursor:pointer;border-radius:8px;}
+.ml-isi button:hover{background:#F3F5F9;}
+.tindakan{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+.tk b{font-size:30px;}
+.btn-tutup-paste{background:none;border:1px solid var(--line-tebal);border-radius:9px;padding:5px 12px;font-family:var(--sans);font-size:13px;cursor:pointer;}
+
+/* pengajuan: satu baris seperti contoh */
+.pj-kartu{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:18px;align-items:center;padding:16px 20px;border:1px solid #F0C98A;}
+.pj-kartu .jdl,.pj-kartu .baris,.pj-kartu .alasan,.pj-kartu .pj-ket{grid-column:1;}
+.pj-kartu .pj-tb{grid-column:2;grid-row:1 / span 3;flex-wrap:wrap;justify-content:flex-end;max-width:430px;}
+.pj-kartu .pj-tb button,.pj-kartu .pj-tb a{flex:0 0 auto;min-width:0;height:44px;padding:0 16px;}
+.pj-kartu .alasan{margin-bottom:0;border-radius:10px;}
+.pj-kartu .jdl{font-size:13px;letter-spacing:.06em;}
+
+/* saringan pil */
+.chip-baris{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px;}
+.chip{min-height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line-tebal);background:#fff;
+  font-family:var(--sans);font-weight:600;font-size:13.5px;color:#3A4360;cursor:pointer;}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+/* tabel lelang terbuka */
+.tabel-lelang-wadah{background:#fff;border:1px solid #E1E5EE;border-radius:16px;overflow-x:auto;}
+table.tabel-lelang{width:100%;min-width:900px;border-collapse:collapse;font-size:14px;border-radius:0;}
+table.tabel-lelang thead th{background:#F7F8FB;text-align:left;color:#5A6480;font-family:var(--sans);font-size:12.5px;font-weight:600;
+  letter-spacing:0;text-transform:none;padding:12px 10px;border-bottom:1px solid #E1E5EE;white-space:nowrap;}
+table.tabel-lelang th.kanan,table.tabel-lelang td.kanan{text-align:right;}
+.lb-baris td{padding:13px 10px;border-top:1px solid #EDF0F5;vertical-align:middle;cursor:pointer;}
+.lb:first-of-type .lb-baris td{border-top:none;}
+.lb-baris:hover td{background:#FAFBFE;}
+.lb.buka .lb-baris td{background:#F3F5FB;}
+.lb.dipilih .lb-baris td{background:#EEF8F7;}
+.lb-cek{width:36px;padding-left:16px!important;}
+.lb-cek input{width:18px;height:18px;min-height:0;accent-color:var(--navy);}
+.lb-kota{font-weight:700;}
+.lb-sub{font-size:12.5px;color:#5A6480;}
+.pil-tipe{background:#ECEEF8;color:var(--navy);font-weight:600;font-size:12.5px;padding:3px 8px;border-radius:6px;white-space:nowrap;}
+.pil-st{font-family:var(--mono);font-weight:600;font-size:12.5px;padding:3px 8px;border-radius:6px;white-space:nowrap;}
+.pil-st.merah{background:#FDECEA;color:#A9322A;} .pil-st.hijau{background:#E3F4F1;color:#0B6350;font-family:var(--sans);}
+.pil-st.biru{background:#ECEEF8;color:var(--navy);font-family:var(--sans);font-size:11px;}
+.mono{font-family:var(--mono);} .kecil{font-size:13px;} .tebal{font-weight:600;}
+.lb-beda{font-size:12px;font-weight:600;color:#5A6480;} .lb-beda.merah{color:#A9322A;} .lb-beda.hijau{color:#0B6350;}
+.btn-lb{height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--navy);background:#fff;color:var(--navy);
+  font-family:var(--sans);font-weight:700;font-size:13.5px;cursor:pointer;white-space:nowrap;}
+.btn-lb.utama{background:var(--navy);color:#fff;}
+.lb-rinci td{padding:0;border:none;}
+.lb.buka .lb-rinci td{padding:4px 14px 16px;background:#F3F5FB;}
+.lb-rinci .card{margin:0;box-shadow:none;}
+.lb-rinci .punggung{display:none;}
+.lb-rinci .card-head.dengan-cek{grid-template-columns:1fr auto;}
+.sr{position:absolute;left:-9999px;}
+@media (max-width:860px){
+  .cari-admin{min-width:0;flex:1 1 100%;order:3;}
+  .bar-atas h1{font-size:24px;}
+  .pj-kartu{grid-template-columns:1fr;}
+  .pj-kartu .pj-tb{grid-column:1;grid-row:auto;justify-content:flex-start;margin-top:10px;max-width:none;}
+  .aku{display:none!important;}
+}
+
+/* v113b-2 */
+#kotak-pengajuan .section-title{display:none;}
+#kotak-pengajuan{margin-top:14px;}
+.pj-kartu .pj-tb{flex-wrap:nowrap;max-width:none;}
+.pj-kartu .pj-ket{font-size:12px;margin-top:6px;}
+#bar-kota-lelang,#bar-tujuan-lelang{display:inline-block;margin:0 8px 12px 0;vertical-align:middle;}
+#tab-isi-lelang .bar-tanggal{background:none!important;border:none!important;padding:0!important;margin:0!important;box-shadow:none!important;}
+#tab-isi-lelang .bar-tanggal .bt-l{display:none;}
+#tab-isi-lelang .bar-tanggal select{height:38px;border-radius:19px!important;padding:0 14px;font-family:var(--sans);font-size:13.5px;}
+.bar-hapus{gap:8px;margin-bottom:12px;}
+.bar-hapus button{height:36px;padding:0 13px!important;font-size:13px!important;font-weight:600!important;}
+.btn-siar{background:#fff!important;border:1px solid #1F9E52!important;color:#147A3E!important;}
+.btn-siar:hover{background:#1F9E52!important;color:#fff!important;}
+@media (max-width:860px){ .pj-kartu .pj-tb{flex-wrap:wrap;} }
+
+.pj-kartu{grid-template-columns:1fr!important;}
+.pj-kartu .pj-tb{grid-column:1!important;grid-row:auto!important;justify-content:flex-start;margin-top:12px;flex-wrap:wrap;}
+.btn-lb{min-height:38px;height:auto;}
+</style>
+</head>
+<body>
+
+<div class="rangka">
+  <aside class="sisi" id="sisi">
+    <div class="sisi-kop">
+      <img src="data:image/webp;base64,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" alt="UNIFAM">
+      <div><div class="t">Lelang</div><div class="s">PT. UNIFAM</div></div>
+    </div>
+    <nav>
+      <a href="admin.html" class="aktif" id="m-beranda" onclick="event.preventDefault();menuAdmin('beranda')"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg></span> Beranda</a>
+      <a href="#" id="m-lelang" onclick="event.preventDefault();menuAdmin('lelang')"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span> Lelang <span class="nb" id="nb-lelang"></span></a>
+      <a href="#" id="m-kiriman" onclick="event.preventDefault();menuAdmin('kiriman')"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span> Kiriman &amp; order <span class="nb" id="nb-kiriman"></span></a>
+      <a href="#" id="m-pj" onclick="event.preventDefault();menuAdmin('pengajuan')"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span> Pengajuan harga <span class="nb oranye" id="nb-pj"></span></a>
+      <a href="rekap.html"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15V11M12 15V8M16 15v-5"/></svg></span> Rekap &amp; report</a>
+      <a href="ringkasan.html"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 6"/></svg></span> Ringkasan</a>
+      <div class="grup">Data</div>
+      <a href="ekspedisi.html"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c1-3.5 3.5-5 6.5-5s5.5 1.5 6.5 5M16 4.5a3.5 3.5 0 0 1 0 7M18 15c2 .6 3.2 2.3 3.6 5"/></svg></span> Ekspedisi</a>
+      <a href="rate.html"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/></svg></span> Template rate</a>
+      <a href="kesepakatan.html"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg></span> Kesepakatan rate</a>
+      <div class="grup">Sistem</div>
+      <a href="pengaturan.html"><span class="ik"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></span> Setelan</a>
+    </nav>
+    <div class="sisi-kaki" id="sisi-kaki">PT. UNIFAM<br>Logistik &amp; Transportasi</div>
+  </aside>
+
+  <div class="utama">
+    <div class="bar-atas">
+      <button class="menu" aria-label="Menu" onclick="document.getElementById('sisi').classList.toggle('buka')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="tajuk">
+        <h1 id="sapa">Panel Lelang</h1>
+        <div class="ket" id="sapa-ket">Posting lelang, lihat penawaran, pilih pemenang</div>
+      </div>
+      <div class="aksi">
+        <label class="cari-admin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <input id="cari-admin" type="text" placeholder="Cari kota, distributor, ekspedisi…" aria-label="Cari lelang" oninput="cariAdmin=this.value;render()"></label>
+        <button class="btn-baru" onclick="bukaPaste()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Lelang dari planning</button>
+        <details class="menu-lain"><summary aria-label="Menu lain">⋯</summary>
+          <div class="ml-isi">
+            <button onclick="cekArmada()">Cek akses Pesanan Armada</button>
+            <button onclick="segarkanSekarang()">Segarkan data</button>
+            <button onclick="kunciPanel()">Kunci panel</button>
+          </div></details>
+        <div class="aku"><div class="bulat">N</div><div><div class="n">Nano</div><div class="r">Admin</div></div></div>
+      </div>
+    </div>
+    <div class="isi">
+
+
+<div id="status-bar">Memuat data…</div>
+
+<main>
+  <section id="kotak-tindakan" class="tindakan" aria-label="Perlu tindakan"></section>
+
+  <div id="kotak-pengajuan"></div>
+
+  <div class="tab-admin">
+    <button id="t-lelang" class="aktif" onclick="gantiTabAdmin('lelang')">
+      Lelang <span class="hit" id="hit-lelang">0</span></button>
+    <button id="t-kiriman" onclick="gantiTabAdmin('kiriman')">
+      Kiriman &amp; Order <span class="hit" id="hit-kiriman">0</span></button>
+  </div>
+
+  <div id="tab-isi-lelang">
+    <div id="panel-paste" class="sembunyi">
+    <div class="section-title">
+      <h2>Tambah Lelang dari Planning</h2>
+      <small><button class="btn-tutup-paste" onclick="bukaPaste(false)">tutup</button></small>
+    </div>
+    <div class="panel-box">
+      <textarea id="paste-area" placeholder="Paste baris planning di sini, contoh:&#10;13/08/2026&#9;WURY&#9;PT. Prisma Reksa Sejahtera Bersama - DUMAI&#9;1.868&#9;30,7&#9;20 ft"></textarea>
+      <div class="paste-hint">Urutan kolom (pisah tab): Tanggal · Sales · Distributor - KOTA · Jumlah Karton · Kubikasi · Tipe Mobil. Distributor dan kota disambung dengan tanda " - ". Kolom ke-7 opsional untuk rate patokan manual.</div>
+
+      <div class="baris-batas">
+        <div class="kolom">
+          <label>Lelang tutup tanggal</label>
+          <input id="tutup-tgl" type="date" onchange="hitungTutup()">
+        </div>
+        <div class="kolom">
+          <label>Pukul</label>
+          <input id="tutup-jam" type="time" value="12:00" onchange="hitungTutup()">
+        </div>
+        <div class="tutup-pukul baik" id="tutup-info"></div>
+      </div>
+
+      <button class="btn-primary" onclick="prosesPaste()">Proses Paste</button>
+      <div id="preview-wrap"></div>
+    </div>
+    </div>
+
+    <div class="section-title">
+      <h2>Lelang terbuka</h2>
+      <small id="jumlah-lelang"></small>
+    </div>
+    <div class="chip-baris" id="filter-lelang"></div>
+    <div class="bar-hapus">
+      <button class="btn-siar" onclick="bukaSiaran()">Beritahu semua ekspedisi</button>
+      <button class="btn-rate" onclick="bukaUsulRate()">Perbarui tab Rate</button>
+      <button class="btn-combo" id="btn-combo" onclick="gabungCombo()" disabled>Gabung jadi Combo</button>
+      <button class="btn-hapus" id="btn-hapus-pilih" onclick="hapusTerpilih()" disabled>Hapus Terpilih</button>
+      <button class="btn-hapus-semua" onclick="hapusSemua()">Hapus Semua Lelang</button>
+      <span class="pilih-info" id="pilih-info">belum ada yang dipilih</span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div id="tab-isi-kiriman" class="sembunyi">
+    <div id="riwayat-wrap"></div>
+  </div>
+</main>
+
+<footer>Begitu pemenang dipilih, lelang otomatis hilang dari link semua ekspedisi.</footer>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ====== GANTI URL INI kalau deployment Apps Script berubah ====== */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbw3NTsaRctj_PsQogkamjw0uyYHcbeN4WnO3Fpo1Hrz33aSBPLh400RZx_UEX6byhgU/exec';
+const BASE_URL = 'https://nanodoang.github.io/UNIFAM-lelang-expedisi';
+
+let jsonpN = 0;
+function jsonp(url){
+  return new Promise((resolve, reject) => {
+    const cb = 'gascb' + (++jsonpN) + '_' + Date.now();
+    const s = document.createElement('script');
+    const t = setTimeout(() => { bersih(); reject(new Error('Timeout — server terlalu lama merespons. Coba muat ulang halaman.')); }, 60000);
+    function bersih(){ clearTimeout(t); try{ delete window[cb]; }catch(e){} if(s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = (data) => { bersih(); resolve(data); };
+    s.src = url + '&callback=' + cb;
+    s.onerror = () => { bersih(); reject(new Error('Gagal terhubung ke Apps Script')); };
+    document.body.appendChild(s);
+  });
+}
+
+const LOGO_SRC = 'data:image/webp;base64,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';
+const KUNCI_ADMIN = 'lelang-unifam-admin';
+
+/* Panel mengunci sendiri setelah menganggur selama ini.
+   Ubah angkanya kalau terasa kependekan atau kepanjangan. */
+const BATAS_NGANGGUR_MENIT = 30;
+
+function ambilPassAdmin(){
+  try{
+    const mentah = localStorage.getItem(KUNCI_ADMIN);
+    if(!mentah) return '';
+    let d;
+    try { d = JSON.parse(mentah); } catch(e){ d = null; }
+    if(!d || !d.pass) { hapusPassAdmin(); return ''; }   // format lama, minta masuk ulang
+    if(Date.now() - (d.waktu || 0) > BATAS_NGANGGUR_MENIT * 60000){
+      hapusPassAdmin();
+      return '';
+    }
+    return d.pass;
+  }catch(e){ return ''; }
+}
+function simpanPassAdmin(v){
+  try{ localStorage.setItem(KUNCI_ADMIN, JSON.stringify({pass:v, waktu:Date.now()})); }catch(e){}
+}
+function hapusPassAdmin(){ try{ localStorage.removeItem(KUNCI_ADMIN); }catch(e){} }
+
+/* Setiap kali ada aktivitas nyata dari orangnya, hitungan menganggur diulang.
+   Muat ulang otomatis di latar TIDAK menyegarkan — supaya panel yang
+   ditinggal terbuka tetap mengunci sendiri. */
+let segarTerakhir = 0;
+function segarkanWaktuAdmin(){
+  const now = Date.now();
+  if(now - segarTerakhir < 15000) return;      // cukup tiap 15 detik
+  segarTerakhir = now;
+  try{
+    const mentah = localStorage.getItem(KUNCI_ADMIN);
+    if(!mentah) return;
+    const d = JSON.parse(mentah);
+    if(!d || !d.pass) return;
+    localStorage.setItem(KUNCI_ADMIN, JSON.stringify({pass:d.pass, waktu:now}));
+  }catch(e){}
+}
+['click','keydown','touchstart'].forEach(ev =>
+  document.addEventListener(ev, segarkanWaktuAdmin, {passive:true}));
+
+/* Periksa berkala, supaya terkunci walaupun halaman cuma dibiarkan terbuka */
+setInterval(() => {
+  if(document.getElementById('gerbang')) return;
+  if(!ambilPassAdmin()){
+    bukaGerbang('Panel terkunci sendiri karena tidak dipakai selama ' + BATAS_NGANGGUR_MENIT + ' menit.');
+  }
+}, 20000);
+
+async function gas(params){
+  if(!params.adminPass) params.adminPass = ambilPassAdmin();
+  return kirimKeServer(params);
+}
+
+/* Jalur utama fetch; JSONP hanya cadangan. Kalau keduanya gagal,
+   sebab dari jalur utama yang dilaporkan — bukan sekadar "timeout". */
+async function kirimKeServer(params){
+  const q = Object.keys(params).map(k => encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');
+  const url = GAS_URL + '?' + q;
+
+  let sebabUtama = '';
+  try {
+    const r = await fetch(url);
+    if(!r.ok) {
+      sebabUtama = 'server menjawab ' + r.status + ' ' + r.statusText;
+    } else {
+      const teks = await r.text();
+      if(/^\s*<(!DOCTYPE|html)/i.test(teks)){
+        throw new Error('Server mengembalikan halaman web, bukan data. Biasanya berarti deployment Apps Script perlu diatur ulang ke "Who has access: Anyone".');
+      }
+      let d;
+      try { d = JSON.parse(teks); }
+      catch(e){ throw new Error('Jawaban server tidak terbaca: ' + teks.slice(0, 120)); }
+      if(d && d.error) throw new Error(d.error);
+      return d;
+    }
+  } catch(e){
+    if(!sebabUtama) sebabUtama = e.message;
+    // error dari server sendiri tidak perlu diulang lewat jalur cadangan
+    if(/password|action tidak dikenal|tidak ditemukan|halaman web|tidak terbaca/i.test(sebabUtama)){
+      throw new Error(sebabUtama);
+    }
+  }
+
+  try {
+    const d = await jsonp(url);
+    if(d && d.error) throw new Error(d.error);
+    return d;
+  } catch(e2){
+    throw new Error(sebabUtama || e2.message);
+  }
+}
+
+let lelangList = [], bidList = [], daftarEkspedisi = [], konfirmasiList = [], pendingPreview = [];
+let jumlahBarisMentah = 0;
+let daftarOrder = [];
+let tglPilih = '';        // '' = semua tanggal
+let kotaPilih = '';       // '' = semua kota (tab Lelang)
+let tujuanPilih = '';     // '' = semua tujuan — "Distributor - Kota" spesifik
+let kotaPilihK = '';      // '' = semua kota (tab Kiriman)
+let rateInfo = {jumlah:0, kota:[]};
+let versiScript = '';
+let terpilih = new Set();
+let lelangBuka = new Set(), cariAdmin = '', filterLelang = '';   // v113b
+function bukaLelang(id){ if(lelangBuka.has(id)) lelangBuka.delete(id); else lelangBuka.add(id); render(); }
+function bukaPaste(buka){
+  const el = document.getElementById('panel-paste'); if(!el) return;
+  const mau = buka === undefined ? el.classList.contains('sembunyi') : buka;
+  el.classList.toggle('sembunyi', !mau);
+  if(mau){ gantiTabAdmin('lelang'); el.scrollIntoView({behavior:'smooth', block:'start'}); setTimeout(() => { const t = document.getElementById('paste-area'); if(t) t.focus(); }, 300); }
+}
+function menuAdmin(m){
+  ['beranda','lelang','kiriman','pj'].forEach(k => { const a = document.getElementById('m-' + k); if(a) a.classList.remove('aktif'); });
+  const a = document.getElementById('m-' + (m === 'pengajuan' ? 'pj' : m)); if(a) a.classList.add('aktif');
+  document.getElementById('sisi').classList.remove('buka');
+  if(m === 'pengajuan'){ const el = document.getElementById('kotak-pengajuan'); if(el) el.scrollIntoView({behavior:'smooth'}); return; }
+  if(m === 'beranda'){ gantiTabAdmin('lelang'); return; }
+  gantiTabAdmin(m);
+  const t = document.querySelector('.tab-admin'); if(t) t.scrollIntoView({behavior:'smooth'});
+}
+let terpilihOrder = new Set();   // combo order — beda dari 'terpilih' (combo lelang)
+
+function togglePilihOrder(id, el){
+  if(el.checked) terpilihOrder.add(id); else terpilihOrder.delete(id);
+  perbaruiBarComboOrder();
+}
+
+function perbaruiBarComboOrder(){
+  const n = terpilihOrder.size;
+  let bar = document.getElementById('bar-combo-order');
+  if(!bar){
+    bar = document.createElement('div');
+    bar.id = 'bar-combo-order';
+    bar.className = 'bar-combo-order';
+    document.body.appendChild(bar);
+  }
+  if(n === 0){ bar.classList.remove('tampil'); bar.innerHTML=''; return; }
+  bar.classList.add('tampil');
+  bar.innerHTML = `<span>${n} order dipilih</span>
+    <button class="btn-k putih" onclick="batalPilihOrder()">Batal</button>
+    <button class="btn-k hijau" ${n < 2 ? 'disabled title="pilih minimal 2 order"' : ''}
+      onclick="gabungComboOrder()">Gabung jadi Combo</button>`;
+}
+
+function batalPilihOrder(){
+  terpilihOrder.clear();
+  perbaruiBarComboOrder();
+  render();
+}
+
+async function gabungComboOrder(){
+  const ids = Array.from(terpilihOrder);
+  if(ids.length < 2) return;
+  const noOrderTerpilih = daftarOrder.filter(o => ids.includes(o.id)).map(o => o.noOrder);
+
+  if(!confirm(`Gabung ${ids.length} order jadi satu combo?\n\n${noOrderTerpilih.join('\n')}\n\n` +
+      `No Order tetap terpisah — cuma ditandai berpasangan di panel & rekap.`)) return;
+
+  try{
+    setStatus('Menggabungkan…');
+    const r = await gas({action:'order_combo_buat', ids: ids.join(',')});
+    terpilihOrder.clear();
+    perbaruiBarComboOrder();
+    await muat(true);
+    setStatus(`${r.jumlah} order digabung jadi satu combo.`);
+  }catch(err){ setStatus('Gagal menggabungkan: ' + err.message, true); }
+}
+
+async function bubarkanComboOrder(grup){
+  if(!confirm('Bubarkan kelompok combo ini?\n\nOrder-ordernya tetap ada, cuma tidak lagi ditandai berpasangan.')) return;
+  try{
+    setStatus('Membubarkan…');
+    await gas({action:'order_combo_bubar', grup});
+    await muat(true);
+    setStatus('Kelompok combo dibubarkan.');
+  }catch(err){ setStatus('Gagal membubarkan: ' + err.message, true); }
+}
+
+/* Label kecil "COMBO" di sebelah No Order kalau order ini tergabung,
+   dengan daftar pasangannya lewat title dan tombol bubarkan */
+function labelComboOrder(o){
+  if(!o.grupCombo) return '';
+  const pasangan = daftarOrder.filter(x => x.grupCombo === o.grupCombo && x.id !== o.id);
+  const judul = pasangan.length ? `Satu combo dengan: ${pasangan.map(x => x.noOrder).join(', ')}` : '';
+  return ` <span class="lencana-combo" title="${judul}">COMBO</span>
+    <button class="btn-bubar-combo" title="bubarkan kelompok combo"
+      onclick="bubarkanComboOrder('${o.grupCombo}')">×</button>`;
+}
+
+function togglePilih(id, el){
+  if(el.checked) terpilih.add(id); else terpilih.delete(id);
+  perbaruiBarHapus();
+}
+
+function perbaruiBarHapus(){
+  const n = terpilih.size;
+  const btn = document.getElementById('btn-hapus-pilih');
+  if(btn) btn.disabled = n === 0;
+
+  /* combo butuh minimal 2 lelang, dan semuanya belum tergabung combo lain */
+  const bisaCombo = n >= 2 && Array.from(terpilih).every(id => {
+    const l = lelangList.find(x => x.id === id);
+    return l && !l.combo && l.status !== 'selesai';
+  });
+  const btnC = document.getElementById('btn-combo');
+  if(btnC) btnC.disabled = !bisaCombo;
+
+  const info = document.getElementById('pilih-info');
+  if(info) info.textContent = n === 0 ? 'belum ada yang dipilih'
+    : `${n} lelang dipilih${n >= 2 && !bisaCombo ? ' · ada yang sudah combo / sudah selesai' : ''}`;
+}
+
+async function hapusTerpilih(){
+  const ids = Array.from(terpilih);
+  if(ids.length === 0) return;
+  const daftar = ids.map(id => {
+    const l = lelangList.find(x => x.id === id);
+    return l ? `• ${l.customer} — ${l.kota} (${l.tanggal})` : '• ' + id;
+  }).join('\n');
+  if(!confirm(`Hapus ${ids.length} lelang berikut?\n\n${daftar}\n\nPenawaran & konfirmasi terkait ikut terhapus. Baris yang sudah masuk ke Pesanan Armada TIDAK ikut terhapus.`)) return;
+  try{
+    setStatus('Menghapus…');
+    const r = await gas({action:'lelang_hapus', ids: ids.join(',')});
+    terpilih.clear();
+    await muat();
+    setStatus(`Terhapus: ${r.lelang} lelang, ${r.penawaran} penawaran, ${r.konfirmasi} konfirmasi.`);
+  }catch(err){ setStatus('Gagal menghapus: ' + err.message, true); }
+}
+
+async function hapusSemua(){
+  if(!confirm(`Hapus SEMUA data lelang?\n\nSeluruh lelang, penawaran, dan konfirmasi akan dikosongkan.\nDaftar Ekspedisi, Rate, dan Alamat TIDAK ikut terhapus.\nBaris yang sudah masuk ke Pesanan Armada juga TIDAK terhapus.`)) return;
+  if(!confirm('Sekali lagi: data lelang yang terhapus tidak bisa dikembalikan. Lanjutkan?')) return;
+  try{
+    setStatus('Menghapus semua data lelang…');
+    const r = await gas({action:'lelang_hapus_semua'});
+    terpilih.clear();
+    await muat();
+    const d = r.dihapus || {};
+    setStatus(`Terhapus: ${d.Lelang||0} lelang, ${d.Penawaran||0} penawaran, ${d.Konfirmasi||0} konfirmasi.`);
+  }catch(err){ setStatus('Gagal menghapus: ' + err.message, true); }
+}
+
+function setStatus(teks, error){
+  const el = document.getElementById('status-bar');
+  el.textContent = teks;
+  el.className = error ? 'err' : '';
+}
+
+function formatRupiah(n){ return "Rp " + Number(n).toLocaleString("id-ID"); }
+function formatKarton(n){ return Number(n).toLocaleString("id-ID"); }
+function formatCbm(n){ return Number(n).toLocaleString("id-ID",{minimumFractionDigits:1}); }
+
+/* ---- konversi tanggal untuk <input type="date"> ----
+   Sheet menyimpan dd/mm/yyyy, sedangkan input date memakai yyyy-mm-dd */
+function keISO(t){
+  if(!t) return '';
+  const s = String(t).trim();
+  let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if(m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+  return '';
+}
+function keLokal(iso){
+  if(!iso) return '';
+  const m = String(iso).trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : String(iso).trim();
+}
+const HARI_SINGKAT = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+
+/* Tanggal & jam tutup, mis. "Sen 17/08 12.00" */
+function tanggalTutup(ts){
+  if(!ts) return '';
+  const d = new Date(ts);
+  if(isNaN(d.getTime())) return '';
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const jj = String(d.getHours()).padStart(2,'0');
+  const mn = String(d.getMinutes()).padStart(2,'0');
+  return `${HARI_SINGKAT[d.getDay()]} ${dd}/${mm} ${jj}.${mn}`;
+}
+
+/* Sisa waktu. Lebih dari sehari ditulis dalam hari, bukan puluhan jam. */
+function formatJam(ts){
+  const diff = ts - Date.now();
+  if(diff <= 0) return "lewat batas";
+  const menit = Math.floor(diff/60000);
+  const jam = Math.floor(menit/60);
+  const hari = Math.floor(jam/24);
+  if(hari > 0) return `sisa ${hari} hari ${jam%24} jam`;
+  if(jam > 0)  return `sisa ${jam}j ${menit%60}m`;
+  return `sisa ${menit}m`;
+}
+function hitungTargetLokal(rank1){
+  const r = Number(rank1) || 0;
+  return r ? Math.ceil(r * 0.97 / 50000) * 50000 : 0;
+}
+function bidsUntuk(idLelang){
+  return bidList.filter(b => b.idLelang === idLelang).sort((a,b) => a.harga - b.harga);
+}
+
+function linkUntuk(nama){ return `${BASE_URL}/index.html?ekspedisi=${encodeURIComponent(nama)}`; }
+function waUntuk(e){
+  const teks = [
+    `Halo ${e.nama}, ini akses lelang kiriman UNIFAM untuk tim Anda:`,
+    ``,
+    linkUntuk(e.nama),
+    ``,
+    `User     : ${e.user || e.nama}`,
+    e.password ? `Password : ${e.password}` : '',
+    ``,
+    `Di dalamnya ada 2 bagian: *Lelang terbuka* untuk mengisi harga penawaran, dan *Riwayat dipakai* untuk mengisi ATD, ATA, dan tanggal dooring.`,
+    ``,
+    `Mohon password ini tidak dibagikan ke pihak lain.`
+  ].filter(x => x !== '').join('\n');
+  return `https://wa.me/${e.wa}?text=${encodeURIComponent(teks)}`;
+}
+
+/* Panel hanya benar-benar terkunci kalau Code.gs versi baru sudah ter-deploy.
+   Kalau backend masih versi lama, password tidak diperiksa di server —
+   keadaan itu ditampilkan terang-terangan supaya tidak lolos tanpa disadari. */
+function cekVersiBackend(versi){
+  const lama = document.getElementById('peringatan-versi');
+  if(lama) lama.remove();
+
+  const angka = parseInt(String(versi || '').replace(/^v/, ''), 10);
+  if(angka >= 11) return;
+
+  const d = document.createElement('div');
+  d.id = 'peringatan-versi';
+  d.className = 'peringatan-versi';
+  d.innerHTML = `<b>Panel ini belum terlindungi password</b>
+    Apps Script masih versi <code>${versi || 'lama'}</code>, sedangkan pengunci password
+    baru ada sejak <code>v11</code>. Paste ulang <code>Code.gs</code> lalu
+    <code>Manage deployments &rarr; ikon pensil &rarr; Version: New version &rarr; Deploy</code>.`;
+  const bar = document.getElementById('status-bar');
+  bar.parentNode.insertBefore(d, bar.nextSibling);
+}
+
+/* ---------- gerbang masuk admin ---------- */
+function bukaGerbang(pesan){
+  if(document.getElementById('gerbang')) {
+    if(pesan){
+      const el = document.getElementById('gerbang-salah');
+      if(el) el.innerHTML = `<div class="salah">${pesan}</div>`;
+      const b = document.getElementById('gerbang-btn');
+      if(b) b.disabled = false;
+    }
+    return;
+  }
+  const g = document.createElement('div');
+  g.id = 'gerbang';
+  g.innerHTML = `
+    <div class="kartu">
+      <div class="logo-baris"><img src="${LOGO_SRC}" alt="UNIFAM"></div>
+      <h2>Panel Admin Lelang</h2>
+      <p class="ket">Halaman ini hanya untuk tim UNIFAM. Masukkan password admin untuk melanjutkan.</p>
+      <div id="gerbang-salah">${pesan ? `<div class="salah">${pesan}</div>` : ''}</div>
+      <label>Password admin</label>
+      <input id="gerbang-pass" type="password" placeholder="••••••••"
+             onkeydown="if(event.key==='Enter')kirimGerbang()">
+      <button class="btn" id="gerbang-btn" onclick="kirimGerbang()">Masuk</button>
+    </div>`;
+  document.body.appendChild(g);
+  setTimeout(() => { const i = document.getElementById('gerbang-pass'); if(i) i.focus(); }, 60);
+}
+
+function tutupGerbang(){
+  const g = document.getElementById('gerbang');
+  if(g) g.remove();
+}
+
+async function kirimGerbang(){
+  const inp = document.getElementById('gerbang-pass');
+  const btn = document.getElementById('gerbang-btn');
+  const v = inp.value.trim();
+  if(!v){ bukaGerbang('Password harus diisi.'); return; }
+  btn.disabled = true;
+  simpanPassAdmin(v);
+  try{
+    await gas({action:'cek_admin'});   // ringan: tidak memuat data apa pun
+    tutupGerbang();
+    muat();
+  }catch(err){
+    hapusPassAdmin();
+    bukaGerbang(String(err.message).toLowerCase().includes('password')
+      ? 'Password admin salah.' : 'Gagal terhubung: ' + err.message);
+  }
+}
+
+function kunciPanel(){
+  hapusPassAdmin();
+  bukaGerbang('');
+}
+
+/* Simpanan tampilan terakhir — supaya panel langsung terisi saat dibuka,
+   lalu diperbarui begitu data baru datang. */
+const KUNCI_SIMPAN = 'lelang-unifam-panel';
+function simpanTampilan(d){
+  try{ localStorage.setItem(KUNCI_SIMPAN, JSON.stringify({waktu:Date.now(), d})); }catch(e){}
+}
+function tampilkanSimpanan(){
+  try{
+    const m = localStorage.getItem(KUNCI_SIMPAN);
+    if(!m) return false;
+    const {waktu, d} = JSON.parse(m);
+    if(!d || Date.now() - waktu > 6*3600000) return false;   // lebih dari 6 jam, abaikan
+    pakaiData(d);
+    const menit = Math.round((Date.now() - waktu)/60000);
+    setStatus(`Tampilan tersimpan ${menit < 1 ? 'baru saja' : menit + ' menit lalu'} · sedang memuat yang terbaru…`);
+    return true;
+  }catch(e){ return false; }
+}
+
+function pakaiData(d){
+  lelangList = d.lelang || [];
+  bidList = d.bids || [];
+  daftarEkspedisi = d.ekspedisi || [];
+  konfirmasiList = d.konfirmasi || [];
+  daftarOrder = d.order || [];
+  rateInfo = d.rate || {jumlah:0, kota:[]};
+  approvalInfo = d.approval || {wa:'', nama:'', keGrup:false};
+  if(d.pengajuan){
+    const baru = new Set(pengajuanList.filter(x => x._baru).map(x => x.id));
+    pengajuanList = d.pengajuan;
+    pengajuanList.forEach(x => { if(baru.has(x.id)) x._baru = true; });
+  }
+  if(Array.isArray(rateInfo)) rateInfo = {jumlah:rateInfo.length, kota:rateInfo.map(r=>String(r.kota||'').toUpperCase())};
+  versiScript = d.versi || '(script versi lama)';
+  const idAda = new Set(lelangList.map(l => l.id));
+  Array.from(terpilih).forEach(id => { if(!idAda.has(id)) terpilih.delete(id); });
+  const el = document.getElementById('ket-eks');
+  if(el) el.textContent = `${daftarEkspedisi.length} ekspedisi terdaftar · kelola akun & password`;
+  cekVersiBackend(d.versi);
+  render();
+  renderPengajuan();
+  renderTindakan();
+}
+
+/* v113: angka "perlu tindakan" di atas panel — dihitung dari data yang sudah dimuat */
+function renderTindakan(){
+  const el = document.getElementById('kotak-tindakan'); if(!el) return;
+  const kini = Date.now();
+  const terbuka = lelangList.filter(l => l.status !== 'selesai');
+  const siap = terbuka.filter(l => l.batasWaktu && l.batasWaktu - kini <= 0);
+  const tanpaOrder = lelangList.filter(l => l.status === 'selesai' &&
+    orderUntuk(l.id).filter(o => o.status !== 'batal').length === 0);
+  const pj = (pengajuanList || []).filter(p => p.status === 'menunggu');
+  const appr = lelangList.filter(l => String(l.approval || '') === 'MENUNGGU');
+  const kotak = (n, judul, ket, aksi, warna) => `<button class="tk ${n ? warna : ''}" onclick="${aksi}">
+      <span class="tk-j">${judul}</span><b>${n}</b><span class="tk-k">${ket}</span></button>`;
+  el.innerHTML =
+    kotak(pj.length, 'Pengajuan harga', pj.length ? pj.slice(0,2).map(p => p.ekspedisi + ' · ' + formatRupiah(p.hargaUsul)).join(', ') : 'tidak ada yang menunggu',
+          "menuAdmin('pengajuan')", 'oranye') +
+    kotak(siap.length, 'Siap pilih pemenang', siap.length ? 'lelang sudah tutup' : 'belum ada yang tutup', "filterLelang='tutup';menuAdmin('lelang');render()", 'biru') +
+    kotak(tanpaOrder.length + appr.length, 'Menang tanpa order', (tanpaOrder.length ? tanpaOrder.length + ' belum dibuatkan No Order' : 'semua sudah ada order') + (appr.length ? ' · ' + appr.length + ' menunggu approval' : ''), "menuAdmin('kiriman')", 'merah') +
+    kotak(terbuka.length, 'Lelang terbuka', (terbuka.length - siap.length) + ' masih berjalan', "filterLelang='';menuAdmin('lelang');render()", '');
+  const nb = (id, n) => { const e = document.getElementById(id); if(e){ e.textContent = n || ''; e.style.display = n ? '' : 'none'; } };
+  nb('nb-lelang', terbuka.length); nb('nb-kiriman', tanpaOrder.length); nb('nb-pj', pj.length);
+  const jam = new Date().getHours();
+  const s = document.getElementById('sapa'), k = document.getElementById('sapa-ket');
+  if(s) s.textContent = `Selamat ${jam < 11 ? 'pagi' : jam < 15 ? 'siang' : jam < 18 ? 'sore' : 'malam'}, Nano`;
+  if(k) k.textContent = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'}) +
+    ' · data terbaru ' + new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+}
+
+/* Paksa ambil ulang dari spreadsheet — dipakai setelah mengedit tab Rate,
+   Alamat, atau leadtim langsung di Google Sheets. */
+/* Periksa apakah spreadsheet Pesanan Armada bisa dibuka & ditulis */
+async function cekArmada(){
+  try{
+    setStatus('Memeriksa akses Pesanan Armada…');
+    const d = await gas({action:'cek_armada'});
+
+    if(d.error){
+      alert('GAGAL membuka spreadsheet Pesanan Armada\n\n' + d.error + '\n\n' + (d.saran || ''));
+      setStatus('Pesanan Armada tidak bisa dibuka.', true);
+      return;
+    }
+
+    const bar = x => x.ok
+      ? `BISA DIBACA — tab "${x.nama}" (gid ${x.gid}), ${x.baris} baris` +
+        (x.barisTerakhir ? `\n   baris terakhir: ${x.barisTerakhir}` : '')
+      : `GAGAL — ${x.error}\n   ${x.saran || ''}`;
+
+    const daftar = (d.tab || []).map(t => `   ${t.nama} → gid ${t.gid}`).join('\n');
+
+    alert(
+      `Spreadsheet: ${d.spreadsheet}\n\n` +
+      `PLANNING DRAFT\n   ${bar(d.planning)}\n\n` +
+      `KONFIRMASI ARMADA\n   ${bar(d.konfirmasi)}\n\n` +
+      `Uji tulis: ${d.bisaMenulis ? 'BERHASIL' : 'GAGAL — ' + (d.catatanTulis || '')}\n\n` +
+      `Tab yang ada di spreadsheet itu:\n${daftar}`
+    );
+
+    setStatus(d.bisaMenulis && d.planning.ok && d.konfirmasi.ok
+      ? 'Pesanan Armada bisa dibaca dan ditulis.'
+      : 'Ada masalah akses ke Pesanan Armada — lihat keterangan di kotak tadi.',
+      !(d.bisaMenulis && d.planning.ok && d.konfirmasi.ok));
+
+  }catch(err){ setStatus('Gagal memeriksa: ' + err.message, true); }
+}
+
+async function segarkanSekarang(){
+  const b = document.querySelector('.btn-segar');
+  if(b){ b.disabled = true; b.textContent = 'Mengambil…'; }
+  try{
+    await muat(true);
+    setStatus('Data diambil ulang dari spreadsheet · ' + new Date().toLocaleTimeString('id-ID'));
+  }catch(err){
+    setStatus('Gagal menyegarkan: ' + err.message, true);
+  }
+  if(b){ b.disabled = false; b.textContent = 'Segarkan'; }
+}
+
+async function muat(segar){
+  if(!ambilPassAdmin()){ bukaGerbang(''); return; }
+  const adaSimpanan = (lelangList.length === 0) ? tampilkanSimpanan() : false;
+  try{
+    if(!adaSimpanan) setStatus('Memuat data…');
+    const d = await gas(segar ? {action:'ambil_semua', segar:'1'} : {action:'ambil_semua'});
+    simpanTampilan(d);
+    pakaiData(d);
+    setStatus(`Tersambung · ${lelangList.length} lelang · ${bidList.length} penawaran · ${daftarEkspedisi.length} ekspedisi · ${rateInfo.jumlah} baris rate · ${versiScript} · ${new Date().toLocaleTimeString('id-ID')}`);
+  }catch(err){
+    if(String(err.message).toLowerCase().includes('password admin')){
+      hapusPassAdmin();
+      bukaGerbang('Password admin salah.');
+    } else {
+      setStatus('Gagal memuat: ' + err.message, true);
+    }
+  }
+}
+
+/* ---------- ekspedisi ---------- */
+
+/* ---------- paste planning ---------- */
+function parseBaris(baris){
+  const kol = baris.split('\t').map(s => s.trim());
+  if(kol.length < 6) return null;
+  // Tanggal | Sales | "Distributor - KOTA" | Jumlah Karton | Kubikasi | Tipe Mobil | (opsional) Rate
+  const [tanggal, sales, gabungan, kartonRaw, cbmRaw, tipeMobil, rateRaw] = kol;
+  if(!tanggal || !gabungan) return null;
+
+  // buang keterangan dalam kurung di belakang, mis. "CV. Garuda - NABIRE (UF-A)"
+  let bersih = gabungan.replace(/\s*\([^()]*\)\s*$/, '').trim();
+
+  // pisah pada tanda " - " TERAKHIR, supaya nama yang mengandung "-" tidak salah potong
+  let customer = bersih, kota = '';
+  const pos = bersih.lastIndexOf(' - ');
+  if(pos > -1){
+    customer = bersih.substring(0, pos).trim();
+    kota = bersih.substring(pos + 3).trim();
+  }
+  if(!kota) return null;
+
+  const karton = parseInt(String(kartonRaw).replace(/[^0-9]/g,''),10) || 0;
+  const cbm = parseFloat(String(cbmRaw).replace(/\./g,'').replace(',','.')) || 0;
+  const rateExisting = rateRaw ? (parseInt(String(rateRaw).replace(/[^0-9]/g,''),10) || 0) : 0;
+  return {tanggal, sales, customer, kota, tipeMobil, karton, cbm, rateExisting};
+}
+
+const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+/* Default: besok pukul 12.00 */
+function isiDefaultTutup(){
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  const iso = d.getFullYear() + '-' +
+              String(d.getMonth()+1).padStart(2,'0') + '-' +
+              String(d.getDate()).padStart(2,'0');
+  const el = document.getElementById('tutup-tgl');
+  if(el && !el.value) el.value = iso;
+  hitungTutup();
+}
+
+/* Gabungkan kolom tanggal + jam jadi satu waktu. null kalau belum lengkap. */
+function waktuTutup(){
+  const tgl = document.getElementById('tutup-tgl');
+  const jam = document.getElementById('tutup-jam');
+  if(!tgl || !jam || !tgl.value || !jam.value) return null;
+  const [th, bl, hr] = tgl.value.split('-').map(Number);
+  const [jj, mm] = jam.value.split(':').map(Number);
+  const d = new Date(th, bl - 1, hr, jj, mm, 0, 0);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function hitungTutup(){
+  const info = document.getElementById('tutup-info');
+  if(!info) return;
+  const d = waktuTutup();
+
+  if(!d){
+    info.className = 'tutup-pukul buruk';
+    info.textContent = 'Tanggal dan jam tutup belum lengkap';
+    return;
+  }
+
+  const selisih = d.getTime() - Date.now();
+  const teks = `${HARI[d.getDay()]} ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} pukul ${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}`;
+
+  if(selisih <= 0){
+    info.className = 'tutup-pukul buruk';
+    info.innerHTML = `<b>${teks}</b><br>sudah lewat — ekspedisi tidak punya waktu mengisi`;
+    return;
+  }
+
+  const jam = Math.floor(selisih / 3600000);
+  const hari = Math.floor(jam / 24);
+  const sisaJam = jam % 24;
+  const durasi = hari > 0 ? `${hari} hari ${sisaJam} jam lagi` : `${jam} jam ${Math.floor((selisih%3600000)/60000)} menit lagi`;
+
+  info.className = 'tutup-pukul baik';
+  info.innerHTML = `Lelang tutup<br><b>${teks}</b> · ${durasi}`;
+}
+
+/* Kunci minggu (Senin sebagai awal minggu) dari "dd/mm/yyyy" */
+function mingguDari(teks){
+  const m = String(teks||'').trim().match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if(!m) return '';
+  const d = new Date(+m[3], +m[2]-1, +m[1]);
+  const h = d.getDay();
+  d.setDate(d.getDate() - (h === 0 ? 6 : h - 1));
+  const p = n => String(n).padStart(2,'0');
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+}
+
+/* Rencana kirim yang sama (distributor + kota + tipe mobil + minggu yang sama)
+   digabung jadi SATU lelang. Ekspedisi cukup memberi satu harga per unit,
+   jumlahnya disebutkan sebagai keterangan. */
+function gabungkanRencana(daftar){
+  const peta = new Map();
+  daftar.forEach(p => {
+    const k = [p.customer.trim().toUpperCase(), p.kota.trim().toUpperCase(),
+               p.tipeMobil.trim().toUpperCase(), mingguDari(p.tanggal)].join('|');
+    if(!peta.has(k)){
+      peta.set(k, Object.assign({}, p, { jumlah: 1, tanggalSemua: [p.tanggal] }));
+    } else {
+      const g = peta.get(k);
+      g.jumlah++;
+      g.karton += p.karton;
+      g.cbm    += p.cbm;
+      g.tanggalSemua.push(p.tanggal);
+      /* tanggal muat dipakai yang paling awal */
+      if(urutTanggal(p.tanggal) < urutTanggal(g.tanggal)) g.tanggal = p.tanggal;
+      if(!g.rateExisting && p.rateExisting) g.rateExisting = p.rateExisting;
+    }
+  });
+  return Array.from(peta.values());
+}
+
+function urutTanggal(teks){
+  const m = String(teks||'').trim().match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  return m ? new Date(+m[3], +m[2]-1, +m[1]).getTime() : 0;
+}
+
+function prosesPaste(){
+  const raw = document.getElementById('paste-area').value.trim();
+  if(!raw) return;
+  const mentah = raw.split('\n').map(b=>b.trim()).filter(b=>b).map(parseBaris).filter(x=>x);
+  pendingPreview = gabungkanRencana(mentah);
+  jumlahBarisMentah = mentah.length;
+  if(pendingPreview.length === 0){
+    setStatus('Tidak ada baris valid. Pastikan 6 kolom dipisah TAB, urut: Tanggal, Sales, "Distributor - KOTA", Karton, Kubikasi, Tipe Mobil.', true);
+  }
+  renderPreview();
+}
+
+function renderPreview(){
+  const wrap = document.getElementById('preview-wrap');
+  if(pendingPreview.length === 0){ wrap.innerHTML=''; return; }
+  const digabung = jumlahBarisMentah - pendingPreview.length;
+  wrap.innerHTML = `
+    <div class="preview-table">
+      ${digabung > 0 ? `<div class="ket-gabung">${jumlahBarisMentah} baris planning digabung jadi
+        <b>${pendingPreview.length} lelang</b> — rencana kirim yang sama (distributor, kota,
+        tipe mobil, dan minggu yang sama) cukup dilelang sekali.</div>` : ''}
+      <table>
+        <thead><tr><th>Tanggal</th><th>Sales</th><th>Customer</th><th>Kota</th>
+          <th>Tipe Mobil</th><th>Jumlah</th><th>Karton</th><th>CBM</th><th>Rate Patokan</th></tr></thead>
+        <tbody>${pendingPreview.map(p=>`<tr>
+          <td>${p.tanggal}</td><td>${p.sales}</td><td>${p.customer}</td><td>${p.kota}</td>
+          <td>${p.tipeMobil}</td>
+          <td>${p.jumlah > 1 ? `<b class="cap-jumlah">${p.jumlah}x</b>` : '1x'}</td>
+          <td>${formatKarton(p.karton)}</td><td>${formatCbm(p.cbm)}</td>
+          <td>${p.rateExisting ? formatRupiah(p.rateExisting) : '<i style="color:#5C7896">dari tab Rate</i>'}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+      <div class="preview-actions">
+        <button class="btn-primary" id="btn-konfirmasi" onclick="konfirmasiPaste()">Tambahkan ${pendingPreview.length} Lelang</button>
+        <button class="btn-secondary" onclick="batalPaste()">Batal</button>
+      </div>
+    </div>`;
+}
+
+async function konfirmasiPaste(){
+  const btn = document.getElementById('btn-konfirmasi');
+  if(btn) btn.disabled = true;
+  const d = waktuTutup();
+  if(!d){ setStatus('Tanggal dan jam tutup lelang belum diisi.', true); if(btn) btn.disabled = false; return; }
+  if(d.getTime() <= Date.now()){
+    if(!confirm('Waktu tutup yang dipilih sudah lewat.\n\nLelang akan langsung tampil sebagai lewat batas. Lanjutkan?')) {
+      if(btn) btn.disabled = false; return;
+    }
+  }
+  const batas = d.getTime();
+  try{
+    for(let i=0; i<pendingPreview.length; i++){
+      const p = pendingPreview[i];
+      setStatus(`Menyimpan lelang ${i+1} dari ${pendingPreview.length}…`);
+      await gas({action:'lelang_insert', tanggal:p.tanggal, sales:p.sales, customer:p.customer,
+                 kota:p.kota, tipeMobil:p.tipeMobil, karton:p.karton, cbm:p.cbm,
+                 jumlah:p.jumlah || 1, tanggalSemua:(p.tanggalSemua||[]).join(', '),
+                 rateExisting:p.rateExisting, batasWaktu:batas});
+    }
+    pendingPreview = [];
+    document.getElementById('paste-area').value = '';
+    renderPreview();
+    await muat();
+  }catch(err){
+    setStatus('Gagal menyimpan lelang: ' + err.message, true);
+    if(btn) btn.disabled = false;
+  }
+}
+function batalPaste(){ pendingPreview=[]; document.getElementById('paste-area').value=''; renderPreview(); }
+
+/* ---------- pilih pemenang ---------- */
+let approvalInfo = { wa:'', nama:'', keGrup:false };
+
+
+/* ===================== v112: PENGAJUAN HARGA DARI EKSPEDISI =====================
+   Ekspedisi yang memilih "harga tidak sesuai" di link konfirmasi mengajukan harga
+   sendiri. Order (lelang maupun order langsung) tertahan sampai diputus di sini. */
+let pengajuanList = [];
+function eksWa(nama){
+  const e = daftarEkspedisi.find(x => String(x.nama).toUpperCase() === String(nama).toUpperCase());
+  return e && e.wa ? e.wa : '';
+}
+function linkKonfirmasiPengajuan(p){
+  if(p.jenis === 'lelang'){
+    const o = daftarOrder.find(x => x.id === p.idOrder);
+    return o ? linkKonfirmasiOrder(o, p.ekspedisi) : `${BASE_URL}/konfirmasi.html?order=${encodeURIComponent(p.idOrder)}&ekspedisi=${encodeURIComponent(p.ekspedisi)}`;
+  }
+  return `${BASE_URL}/konfirmasi.html?order=${encodeURIComponent(p.noOrder)}&eksp=${encodeURIComponent(p.ekspedisi)}`;
+}
+function waKeputusan(p){
+  const setuju = p.status === 'disetujui';
+  const teks = setuju
+    ? `Halo ${p.ekspedisi}, pengajuan harga untuk order *${p.noOrder}* (${p.tujuan}) sebesar *${formatRupiah(p.hargaUsul)}* telah *DISETUJUI* PT. UNIFAM.\n\nSilakan lengkapi data armada & driver melalui link berikut:\n${linkKonfirmasiPengajuan(p)}\n\nTerima kasih 🙏`
+    : `Halo ${p.ekspedisi}, mohon maaf, pengajuan harga untuk order *${p.noOrder}* (${p.tujuan}) sebesar ${formatRupiah(p.hargaUsul)} *belum dapat kami setujui*${p.catatan ? ' — ' + p.catatan : ''}.\n\nApabila tetap bersedia dengan harga order ${formatRupiah(p.hargaAwal)}, mohon konfirmasi melalui link berikut:\n${linkKonfirmasiPengajuan(p)}\n\nTerima kasih atas pengertiannya 🙏`;
+  const wa = eksWa(p.ekspedisi);
+  return wa ? `https://wa.me/${wa}?text=${encodeURIComponent(teks)}` : `https://wa.me/?text=${encodeURIComponent(teks)}`;
+}
+function calonPengganti(p){
+  if(p.jenis !== 'lelang' || !p.idLelang) return null;
+  const l = lelangList.find(x => x.id === p.idLelang);
+  if(!l || l.status !== 'selesai') return null;
+  return bidsUntuk(p.idLelang).find(b => String(b.ekspedisi).toUpperCase() !== String(p.ekspedisi).toUpperCase()) || null;
+}
+function kartuPengajuan(p){
+  const selisih = p.hargaUsul - p.hargaAwal;
+  const calon = calonPengganti(p);
+  const putus = p.status !== 'menunggu';
+  const tb = !putus ? `<div class="pj-tb">
+      <button class="setuju" onclick="pjPutus('${p.id}','setuju')">✓ Setujui ${formatRupiah(p.hargaUsul)}</button>
+      ${calon ? `<button class="alih" onclick="pjPutus('${p.id}','tolak',true)">Tolak &amp; alihkan ke ${esc(calon.ekspedisi)} (${formatRupiah(calon.harga)})</button>` : ''}
+      <button onclick="pjPutus('${p.id}','tolak')">Tolak, minta ikut harga order</button>
+    </div>
+    <div class="pj-ket"><b>Setujui</b>: harga order berubah${p.jenis === 'lelang' ? ' (tercatat di riwayat harga &amp; SPK)' : ' untuk unit ini (tercatat di SPK)'}, ekspedisi bisa lanjut isi data armada.
+      <b>Tolak</b>: ekspedisi diminta menyetujui harga order ${formatRupiah(p.hargaAwal)}${p.jenis === 'lelang' ? ' — atau alihkan ke peringkat berikutnya' : ''}.</div>`
+    : `<div class="pj-tb"><a class="wa" href="${waKeputusan(p)}" target="_blank" rel="noopener">📲 Kabari ${esc(p.ekspedisi)}</a></div>
+       <div class="pj-ket">${p.status === 'disetujui' ? '✓ Disetujui' : '✕ Ditolak'} oleh ${esc(p.oleh)} · ${esc(p.waktuPutus)}${p.catatan ? ' · "' + esc(p.catatan) + '"' : ''}</div>`;
+  return `<div class="pj-kartu ${putus ? (p.status === 'disetujui' ? 'putus-setuju' : 'putus-tolak') : ''}">
+    <div class="jdl">${putus ? '' : '⚠ '}Pengajuan harga · ${esc(p.ekspedisi)}${putus ? '' : ' — perlu keputusan'}</div>
+    <div class="baris">
+      <div><span>No Order</span><b>${esc(p.noOrder || '—')}</b> · ${p.jenis === 'lelang' ? 'LELANG' : 'ORDER LANGSUNG'}</div>
+      <div><span>Tujuan</span>${esc(p.tujuan)} · ${esc(p.tipe)}</div>
+      <div><span>Harga order</span><b>${formatRupiah(p.hargaAwal)}</b></div>
+      <div><span>Diajukan</span><b style="color:var(--red)">${formatRupiah(p.hargaUsul)}</b> (${selisih >= 0 ? '+' : ''}${Number(selisih).toLocaleString('id-ID')})</div>
+    </div>
+    <div class="alasan">Alasan: <i>"${esc(p.alasan)}"</i> · diajukan ${esc(p.waktu)}</div>
+    ${tb}
+  </div>`;
+}
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function renderPengajuan(){
+  try{ renderTindakan(); }catch(e){}
+  const el = document.getElementById('kotak-pengajuan'); if(!el) return;
+  const tunggu = pengajuanList.filter(p => p.status === 'menunggu');
+  const baru = pengajuanList.filter(p => p.status !== 'menunggu' && p._baru);
+  const lama = pengajuanList.filter(p => p.status !== 'menunggu' && !p._baru);
+  if(!tunggu.length && !baru.length && !lama.length){ el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="section-title"><h2>Pengajuan Harga dari Ekspedisi</h2><small>${tunggu.length} menunggu keputusan</small></div>
+    ${tunggu.map(kartuPengajuan).join('')}${baru.map(kartuPengajuan).join('')}
+    ${lama.length ? `<details class="pj-riwayat"><summary>Sudah diputus · 14 hari terakhir (${lama.length})</summary>${lama.map(kartuPengajuan).join('')}</details>` : ''}`;
+}
+async function pjPutus(id, kep, alih){
+  const p = pengajuanList.find(x => x.id === id); if(!p) return;
+  let oleh = ''; try{ oleh = localStorage.getItem('pj-oleh') || ''; }catch(e){}
+  if(kep === 'setuju' && !confirm(`Setujui harga ${formatRupiah(p.hargaUsul)} untuk ${p.noOrder} (${p.ekspedisi})?\nHarga order lama ${formatRupiah(p.hargaAwal)} akan diganti.`)) return;
+  oleh = prompt('Nama yang memutuskan:', oleh); if(!oleh || !oleh.trim()) return;
+  oleh = oleh.trim(); try{ localStorage.setItem('pj-oleh', oleh); }catch(e){}
+  let catatan = '';
+  if(kep === 'tolak'){ catatan = prompt('Catatan untuk ekspedisi (opsional), mis. "harga pasar masih Rp 28 jt":', alih ? 'Order dialihkan ke ekspedisi lain' : ''); if(catatan === null) return; }
+
+  const lamaStatus = p.status;
+  Object.assign(p, { status: kep === 'setuju' ? 'disetujui' : 'ditolak', oleh, catatan, waktuPutus: new Date().toLocaleString('id-ID'), _baru: true });
+  renderPengajuan();
+  if(alih && p.idLelang) bukaAlihkan(p.idLelang);
+  try{
+    setStatus('Menyimpan keputusan pengajuan…');
+    const r = await gas({action:'pengajuan_putus', id, keputusan:kep, oleh, catatan});
+    if(r.pengajuan) Object.assign(p, r.pengajuan);
+    setStatus(`Pengajuan ${p.noOrder} ${p.status}. Kabari ekspedisi lewat tombol WA.`);
+    renderPengajuan();
+    if(kep === 'setuju' && p.jenis === 'lelang') muat(true);
+  }catch(err){
+    Object.assign(p, { status: lamaStatus, _baru: false });
+    renderPengajuan();
+    alert('Gagal menyimpan keputusan: ' + err.message);
+    setStatus('Gagal menyimpan keputusan: ' + err.message, true);
+  }
+}
+
+/* ===================== v110: ALIHKAN PEMENANG ===================== */
+function bukaAlihkan(idLelang){
+  const l = lelangList.find(x => x.id === idLelang); if(!l) return;
+  const bids = bidsUntuk(idLelang);
+  const lama = bids.find(b => b.ekspedisi === l.pemenang);
+  const hargaLama = l.hargaFinal || (lama ? lama.harga : 0);
+  const calon = bids.filter(b => b.ekspedisi !== l.pemenang);
+  const orders = orderUntuk(idLelang).filter(o => o.status !== 'batal' && String(o.ekspedisi || l.pemenang).toUpperCase() === String(l.pemenang).toUpperCase());
+  const sudahKonf = orders.filter(o => konfirmasiList.some(k => k.idLelang === o.id));
+  const peringkat = e => bids.findIndex(b => b.ekspedisi === e) + 1;
+
+  const w = document.createElement('div');
+  w.className = 'tirai'; w.id = 'tirai-alih';
+  w.innerHTML = `<div class="jendela lebar">
+    <span class="tanda-menang">ALIHKAN PEMENANG</span>
+    <h2>${l.kota} · ${l.tipeMobil}</h2>
+    <div style="font-size:13px;color:var(--muted);line-height:1.55">Pemenang sekarang <b style="color:var(--text)">${l.pemenang}</b>
+      (peringkat ${peringkat(l.pemenang) || '-'}${hargaLama ? ', ' + formatRupiah(hargaLama) : ''}). Pilih penggantinya:</div>
+    <div class="pilih-alih">
+      ${bids.map(b => {
+        const isLama = b.ekspedisi === l.pemenang;
+        const pertama = !isLama && b === calon[0];
+        const beda = hargaLama ? b.harga - hargaLama : 0;
+        return `<label class="${isLama ? 'lama' : ''}">
+          <input type="radio" name="alih-ke" value="${b.ekspedisi}" ${isLama ? 'disabled' : ''} ${pertama ? 'checked' : ''}>
+          <span><span class="nm">#${peringkat(b.ekspedisi)} ${b.ekspedisi}</span>${isLama ? ' — pemenang sekarang' : ''}<br>
+            <span class="hg">${formatRupiah(b.harga)}</span>${!isLama && beda ? ` <span style="color:${beda > 0 ? 'var(--red)' : 'var(--teal)'}">(${beda > 0 ? '+' : '−'}${formatRupiah(Math.abs(beda))})</span>` : ''}
+            ${b.namaKapal || b.etd ? `<br><span class="kp">Kapal ${b.namaKapal || '-'}${b.etd ? ' · ETD ' + b.etd : ''}${b.eta ? ' · ETA ' + b.eta : ''}</span>` : ''}</span>
+        </label>`; }).join('')}
+    </div>
+    <div class="kolom">
+      <label>Alasan</label>
+      <input id="alih-alasan" type="text" value="Jadwal kapal ${l.pemenang} tidak support">
+    </div>
+    ${orders.length ? `<div class="peringatan-kecil" style="margin-top:10px;">${orders.length} order aktif milik ${l.pemenang}
+      (${orders.map(o => o.noOrder).join(', ')}) akan <b>DIBATALKAN</b> dan dihapus dari Pesanan Armada.
+      ${sudahKonf.length ? `<br><b>${sudahKonf.length} di antaranya sudah dikonfirmasi armadanya</b> — pastikan ${l.pemenang} sudah diberi tahu.` : ''}</div>` : ''}
+    <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.55">Sesudah dialihkan, lelang berstatus <b>menunggu approval</b>.
+      Order untuk pemenang baru baru bisa dibuat setelah tombol <b>Approval diterima</b> ditekan.</div>
+    <div class="baris-tombol">
+      <button class="btn-primary" style="flex:1;" id="btn-alih" onclick="kirimAlihkan('${idLelang}')">Alihkan &amp; minta approval</button>
+      <button class="btn-nanti" style="width:auto;margin:0;" onclick="document.getElementById('tirai-alih').remove()">Batal</button>
+    </div></div>`;
+  w.onclick = ev => { if(ev.target === w) w.remove(); };
+  document.body.appendChild(w);
+}
+
+async function kirimAlihkan(idLelang){
+  const pilih = document.querySelector('input[name="alih-ke"]:checked');
+  const inp = document.getElementById('alih-alasan');
+  const alasan = inp ? inp.value.trim() : '';
+  if(!pilih){ setStatus('Pilih ekspedisi penggantinya dulu.', true); return; }
+  if(!alasan){ inp.style.borderColor = 'var(--red)'; return; }
+  const ke = pilih.value;
+  const t = document.getElementById('tirai-alih'); if(t) t.remove();
+
+  /* v110c: tampilkan hasilnya SEKETIKA (tidak menunggu server & muat ulang
+     seluruh panel). Kalau server menolak, panel dimuat ulang apa adanya. */
+  const l = lelangList.find(x => x.id === idLelang);
+  const dari = l ? l.pemenang : '';
+  const lama = bidsUntuk(idLelang).find(b => b.ekspedisi === dari);
+  const hargaDari = l ? (l.hargaFinal || (lama ? lama.harga : 0)) : 0;
+  const dibatalkanLokal = [];
+  if(l){
+    daftarOrder.forEach(o => {
+      if(o.idLelang === idLelang && o.status !== 'batal' && String(o.ekspedisi || '').toUpperCase() === String(dari).toUpperCase()){
+        o.status = 'batal'; o.alasanBatal = 'Dialihkan ke ' + ke + ': ' + alasan; dibatalkanLokal.push(o.noOrder);
+      }
+    });
+    l.pemenang = ke; l.approval = 'MENUNGGU'; l.hargaFinal = 0;
+    l.alasanPilih = `Dialihkan dari ${dari} (${Number(hargaDari).toLocaleString('id-ID')}): ${alasan}`;
+    render();
+  }
+  setStatus(`Mengalihkan ${dari} → ${ke}… (menyimpan ke server)`);
+  if(l) window.open(waAlihkan(l), '_blank');
+
+  try{
+    const r = await gas({action:'alihkan_pemenang', idLelang, ke, alasan});
+    const pesan = `Pemenang dialihkan ${r.dari} → ${r.ke}${r.dibatalkan && r.dibatalkan.length ? ' · order dibatalkan: ' + r.dibatalkan.join(', ') : ''} · menunggu approval.`;
+    setStatus(pesan);
+    muat(true).then(() => setStatus(pesan)).catch(() => {});      // sinkron di belakang layar
+  }catch(err){
+    setStatus('Gagal mengalihkan: ' + err.message + ' — data dimuat ulang.', true);
+    muat(true).catch(() => {});
+  }
+}
+
+/* pesan WA permintaan approval pengalihan */
+function waAlihkan(l){
+  const bids = bidsUntuk(l.id);
+  const baru = bids.find(b => b.ekspedisi === l.pemenang);
+  const m = String(l.alasanPilih || '').match(/^Dialihkan dari (.+?) \(([\d.]+)\): (.*)$/);
+  const dari = m ? m[1] : '-', hargaDari = m ? m[2] : '', alasan = m ? m[3] : (l.alasanPilih || '-');
+  const teks = [
+    `Mohon APPROVAL pengalihan pemenang lelang:`,
+    [`Tujuan     : Cikande -> ${l.kota}`, `Distributor: ${l.customer}`, `Tipe       : ${l.tipeMobil}`,
+     `Tgl muat   : ${l.tanggalMuat || l.tanggal || '-'}`].join('\n'),
+    [`Pemenang awal : ${dari}${hargaDari ? ' — Rp ' + hargaDari : ''}`,
+     `*Dialihkan ke : ${l.pemenang}${baru ? ' — ' + formatRupiah(baru.harga) : ''}*`,
+     baru && (baru.namaKapal || baru.etd) ? `Kapal ${baru.namaKapal || '-'}${baru.etd ? ' · ETD ' + baru.etd : ''}` : ''].filter(x => x).join('\n'),
+    `Alasan: ${alasan}`,
+    `Kontainer belum dipesan sampai ada persetujuan. Terima kasih.`
+  ].join('\n\n');
+  if(approvalInfo.keGrup) return `https://wa.me/?text=${encodeURIComponent(teks)}`;
+  const nomor = (approvalInfo.wa || '').replace(/[^0-9]/g, '');
+  return `https://wa.me/${nomor}?text=${encodeURIComponent(teks)}`;
+}
+
+/* v110b: versi ringkas untuk tabel saat sedang menyaring */
+function bisaDialihkan(l){ return !l.combo && l.approval !== 'MENUNGGU' && bidsUntuk(l.id).some(b => b.ekspedisi !== l.pemenang); }
+function tombolAlihMini(l){
+  return bisaDialihkan(l) ? `<button class="btn-mini oranye" title="pemenang tidak bisa support — alihkan ke peringkat berikutnya"
+    onclick="bukaAlihkan('${l.id}')">alihkan</button>` : '';
+}
+function aksiApprovalMini(l){
+  return `<span class="pil-acc">MENUNGGU APPROVAL</span>
+    <a class="tautan-kecil" target="_blank" href="${waAlihkan(l)}">minta via WA</a>
+    <button class="btn-mini hijau" onclick="setujuiAlihkan('${l.id}')">✓ approval</button>`;
+}
+
+function blokTungguApproval(l){
+  const m = String(l.alasanPilih || '').match(/^Dialihkan dari (.+?) \(/);
+  return `<div class="tunggu-acc"><b class="jdl">⏳ Menunggu approval pengalihan</b>
+    ${m ? `Dialihkan dari <b>${m[1]}</b> ke <b>${l.pemenang}</b>.` : `Pemenang dialihkan ke <b>${l.pemenang}</b>.`}
+    Kontainer jangan dipesan dulu sampai disetujui.
+    <div class="tombol2">
+      <a class="wa" target="_blank" href="${waAlihkan(l)}">Minta approval via WA</a>
+      <button class="ok" onclick="setujuiAlihkan('${l.id}')">✓ Approval diterima</button>
+    </div></div>`;
+}
+
+async function setujuiAlihkan(idLelang){
+  const oleh = prompt('Disetujui oleh siapa? (nama atasan yang memberi approval)');
+  if(oleh === null) return;
+  if(!oleh.trim()){ setStatus('Nama yang menyetujui wajib diisi.', true); return; }
+  const l = lelangList.find(x => x.id === idLelang);
+  const sebelum = l ? l.approval : '';
+  if(l){
+    const n = new Date(), p = x => String(x).padStart(2,'0');
+    l.approval = `OK: ${oleh.trim()} ${p(n.getDate())}/${p(n.getMonth()+1)}/${n.getFullYear()} ${p(n.getHours())}:${p(n.getMinutes())}`;
+    render();                                      // tombol buat order langsung terbuka
+  }
+  setStatus('Menyimpan approval…');
+  try{
+    await gas({action:'alihkan_setujui', idLelang, oleh:oleh.trim()});
+    const pesan = 'Approval tercatat — sekarang order kontener bisa dibuat.';
+    setStatus(pesan);
+    muat(true).then(() => setStatus(pesan)).catch(() => {});
+  }catch(err){
+    if(l){ l.approval = sebelum; render(); }
+    setStatus('Gagal menyimpan approval: ' + err.message, true);
+  }
+}
+
+async function batalPemenang(idLelang, namaEks, noOrder){
+  const pesan = [
+    `Batalkan ${namaEks} sebagai pemenang?`, '',
+    'Yang akan terjadi:',
+    '• Lelang kembali terbuka, ekspedisi bisa menawar lagi',
+    noOrder ? `• Baris ${noOrder} DIHAPUS dari planning draft Pesanan Armada` : '',
+    noOrder ? `• Baris ${noOrder} DIHAPUS dari konfirmasi armada (kalau ada)` : '',
+    '• Data konfirmasi armada untuk lelang ini ikut terhapus', '',
+    'Penawaran harga dari semua ekspedisi TIDAK terhapus.'
+  ].filter(x => x !== '').join('\n');
+
+  if(!confirm(pesan)) return;
+  try{
+    setStatus('Membatalkan…');
+    const r = await gas({action:'batal_pemenang', idLelang});
+    await muat(true);
+    setStatus(`Pemenang ${r.pemenangLama || namaEks} dibatalkan. ${r.jejak ? 'Dibersihkan: ' + r.jejak + '.' : ''} Lelang kembali terbuka.`);
+  }catch(err){ setStatus('Gagal membatalkan: ' + err.message, true); }
+}
+
+/* Persetujuan diperlukan kalau salah satu terpenuhi:
+   1. yang dipilih BUKAN penawar termurah, atau
+   2. harganya DI ATAS target rate (walaupun dia yang termurah) */
+function perluPersetujuan(idLelang, ekspedisi){
+  const l = lelangList.find(x => x.id === idLelang);
+  const bids = bidsUntuk(idLelang);
+  const termurah = bids.length ? bids[0] : null;
+  const dipilih = bids.find(b => b.ekspedisi === ekspedisi);
+  if(!dipilih) return { perlu:false };
+
+  const target = l ? (l.target || 0) : 0;
+  const bukanTermurah = !!(termurah && dipilih.harga > termurah.harga);
+  const diAtasTarget  = !!(target && dipilih.harga > target);
+
+  const sebab = [];
+  if(bukanTermurah) sebab.push(`${formatRupiah(dipilih.harga - termurah.harga)} lebih mahal dari penawaran termurah (${termurah.ekspedisi} ${formatRupiah(termurah.harga)})`);
+  if(diAtasTarget)  sebab.push(`${formatRupiah(dipilih.harga - target)} di atas target rate (${formatRupiah(target)})`);
+
+  return { perlu: bukanTermurah || diAtasTarget, bukanTermurah, diAtasTarget,
+           dipilih, termurah, target, sebab };
+}
+
+async function pilihPemenang(idLelang, ekspedisi){
+  const cek = perluPersetujuan(idLelang, ekspedisi);
+  if(cek.perlu){
+    bukaJendelaAlasan(idLelang, ekspedisi, cek.dipilih, cek.termurah, cek);
+    return;
+  }
+  lanjutPilihPemenang(idLelang, ekspedisi, '');
+}
+
+async function lanjutPilihPemenang(idLelang, ekspedisi, alasan){
+  const inp = document.getElementById(`muat-${idLelang}`);
+  const tanggalMuat = inp ? keLokal(inp.value) : '';
+  try{
+    setStatus('Menyimpan pemenang…');
+    const r = await gas({action:'pilih_pemenang', idLelang, pemenang:ekspedisi, tanggalMuat, alasan});
+
+    /* Pindahkan kartunya seketika ke Riwayat Selesai, tanpa menunggu
+       pulang-pergi ke server lagi. */
+    { const l = lelangList.find(x => x.id === idLelang);
+      if(l){
+        l.status = 'selesai';
+        l.pemenang = ekspedisi;
+        if(r && r.noOrder) l.noOrder = r.noOrder;
+        if(tanggalMuat) l.tanggalMuat = tanggalMuat;
+        if(alasan) l.alasanPilih = alasan;
+      }
+      terpilih.delete(idLelang);
+      render(); }
+
+    await muat(true);          // ambil data segar, lewati simpanan sementara
+    if(r && r.kirim && String(r.kirim).indexOf('GAGAL') === 0){
+      setStatus(`Pemenang TERSIMPAN, tapi ${r.kirim}`, true);
+      alert('Pemenang sudah tersimpan dan lelang pindah ke Riwayat Selesai.\n\n' +
+            'TAPI: ' + r.kirim + '\n\n' +
+            'Artinya baris ini BELUM masuk ke Pesanan Armada. Periksa akses ke ' +
+            'spreadsheet Pesanan Armada, lalu batalkan dan pilih ulang pemenangnya.');
+    } else if(r && r.noOrder){
+      setStatus(`No Order ${r.noOrder} dibuat & terkirim ke planning draft Pesanan Armada.`);
+    }
+    bukaJendelaMenang(idLelang, ekspedisi, r ? r.noOrder : '', alasan);
+  }catch(err){ setStatus('Gagal simpan pemenang: ' + err.message, true); }
+}
+
+function bukaJendelaAlasan(idLelang, ekspedisi, dipilih, termurah, cek){
+  const l = lelangList.find(x => x.id === idLelang);
+  cek = cek || perluPersetujuan(idLelang, ekspedisi);
+  const selisih = termurah ? (dipilih.harga - termurah.harga) : 0;
+  const persen = (termurah && termurah.harga) ? (selisih / termurah.harga * 100) : 0;
+  const target = cek.target || 0;
+  const bedaTarget = target ? (dipilih.harga - target) : 0;
+
+  const judulSebab = cek.bukanTermurah && cek.diAtasTarget ? 'Bukan termurah & di atas target'
+                   : cek.bukanTermurah ? 'Bukan penawar termurah'
+                   : 'Di atas target rate';
+
+  const w = document.createElement('div');
+  w.className = 'tirai';
+  w.id = 'tirai-alasan';
+  w.innerHTML = `
+    <div class="jendela">
+      <span class="tanda-menang" style="background:rgba(217,130,15,.16);color:#8A5A0A;">${judulSebab}</span>
+      <h2>${ekspedisi}</h2>
+      <div class="banding-harga">
+        ${target ? `<div class="bh-baris">
+          <span class="bh-l">Target rate</span>
+          <span class="bh-n">${formatRupiah(target)}</span>
+          <span class="bh-e">acuan</span>
+        </div>` : ''}
+        ${termurah ? `<div class="bh-baris">
+          <span class="bh-l">Termurah</span>
+          <span class="bh-n">${formatRupiah(termurah.harga)}</span>
+          <span class="bh-e">${termurah.ekspedisi}</span>
+        </div>` : ''}
+        <div class="bh-baris pilih">
+          <span class="bh-l">Yang dipilih</span>
+          <span class="bh-n">${formatRupiah(dipilih.harga)}</span>
+          <span class="bh-e">${ekspedisi}</span>
+        </div>
+        <div class="bh-selisih">
+          ${cek.bukanTermurah ? `Selisih dari termurah <b>${formatRupiah(selisih)}</b> (${persen.toFixed(1)}%)` : ''}
+          ${cek.bukanTermurah && cek.diAtasTarget ? '<br>' : ''}
+          ${cek.diAtasTarget ? `Selisih dari target <b>${formatRupiah(bedaTarget)}</b>` : ''}
+        </div>
+      </div>
+
+      <div class="kolom" style="margin-top:14px;">
+        <label>${cek.diAtasTarget && !cek.bukanTermurah ? 'Alasan harga di atas target' : 'Alasan tidak memilih yang termurah'}</label>
+        <input id="alasan-pilih" type="text" placeholder="mis. jadwal kapal SPA belum ada"
+               onkeydown="if(event.key==='Enter')kirimAlasan('${idLelang}','${ekspedisi}')">
+        <div style="font-size:11px;color:var(--muted);margin-top:5px;font-family:var(--mono);line-height:1.5;">
+          Tercatat di sheet dan ikut terkirim di permintaan persetujuan.</div>
+      </div>
+
+      <div class="baris-tombol">
+        <button class="btn-primary" style="flex:1;" id="btn-alasan"
+                onclick="kirimAlasan('${idLelang}','${ekspedisi}')">Lanjut pilih</button>
+        <button class="btn-nanti" style="width:auto;margin:0;" onclick="tutupAlasan()">Batal</button>
+      </div>
+    </div>`;
+  w.onclick = ev => { if(ev.target === w) tutupAlasan(); };
+  document.body.appendChild(w);
+  setTimeout(() => { const i = document.getElementById('alasan-pilih'); if(i) i.focus(); }, 50);
+}
+
+function tutupAlasan(){
+  const w = document.getElementById('tirai-alasan');
+  if(w) w.remove();
+}
+
+function kirimAlasan(idLelang, ekspedisi){
+  const inp = document.getElementById('alasan-pilih');
+  const alasan = inp ? inp.value.trim() : '';
+  if(!alasan){
+    if(inp) inp.style.borderColor = 'var(--red)';
+    setStatus('Alasan harus diisi kalau tidak memilih yang termurah.', true);
+    return;
+  }
+  const btn = document.getElementById('btn-alasan');
+  if(btn) btn.disabled = true;
+  tutupAlasan();
+  lanjutPilihPemenang(idLelang, ekspedisi, alasan);
+}
+
+/* Pesan WA permintaan persetujuan */
+function waApproval(l, dipilih, termurah, alasan, noOrder){
+  const target = l ? (l.target || 0) : 0;
+  const bukanTermurah = !!(termurah && dipilih.harga > termurah.harga);
+  const diAtasTarget  = !!(target && dipilih.harga > target);
+
+  const rinci = [
+    noOrder ? `No Order   : ${noOrder}` : '',
+    `Tujuan     : Cikande -> ${l.kota}`,
+    `Distributor: ${l.customer}`,
+    `Tipe       : ${l.tipeMobil}`,
+    `Tgl muat   : ${l.tanggalMuat || l.tanggal || '-'}`
+  ].filter(x => x).join('\n');
+
+  const harga = [
+    target      ? `Target rate    : ${formatRupiah(target)}` : '',
+    termurah    ? `Penawaran termurah : ${termurah.ekspedisi} — ${formatRupiah(termurah.harga)}` : '',
+    `*Yang dipilih   : ${dipilih.ekspedisi} — ${formatRupiah(dipilih.harga)}*`
+  ].filter(x => x).join('\n');
+
+  const sebab = [
+    bukanTermurah ? `- ${formatRupiah(dipilih.harga - termurah.harga)} lebih mahal dari penawaran termurah` : '',
+    diAtasTarget  ? `- ${formatRupiah(dipilih.harga - target)} di atas target rate` : ''
+  ].filter(x => x).join('\n');
+
+  const teks = [
+    `Mohon persetujuan pemilihan ekspedisi:`,
+    rinci,
+    harga,
+    `Sebabnya perlu persetujuan:\n${sebab}`,
+    `Alasan: ${alasan || '-'}`,
+    `Mohon konfirmasi persetujuannya. Terima kasih.`
+  ].filter(x => x).join('\n\n');
+
+  if(approvalInfo.keGrup) return `https://wa.me/?text=${encodeURIComponent(teks)}`;
+  const nomor = (approvalInfo.wa || '').replace(/[^0-9]/g, '');
+  if(!nomor) return `https://wa.me/?text=${encodeURIComponent(teks)}`;
+  return `https://wa.me/${nomor}?text=${encodeURIComponent(teks)}`;
+}
+
+
+function bukaJendelaMenang(idLelang, namaEks, noOrder, alasan){
+  const l = lelangList.find(x => x.id === idLelang);
+  const win = bidsUntuk(idLelang).find(b => b.ekspedisi === namaEks);
+  const eks = daftarEkspedisi.find(e => e.nama.toUpperCase() === String(namaEks).toUpperCase());
+
+  /* persetujuan kalau bukan termurah ATAU di atas target rate */
+  const semuaBid = bidsUntuk(idLelang);
+  const termurah = semuaBid.length ? semuaBid[0] : null;
+  const cekAcc = perluPersetujuan(idLelang, namaEks);
+  const bukanTermurah = cekAcc.perlu;
+  const bisaKirim = approvalInfo.keGrup || !!approvalInfo.wa;
+  const blokApproval = (cekAcc.perlu && bisaKirim && win)
+    ? `<div class="kotak-approval">
+         <b>Perlu persetujuan</b>
+         ${cekAcc.sebab.map(x => '&bull; ' + x).join('<br>')}
+         ${alasan ? `<br>Alasan: <i>${alasan}</i>` : ''}
+       </div>
+       <a class="btn-wa-approval" target="_blank"
+          href="${waApproval(l, win, termurah, alasan, noOrder)}">
+          Minta persetujuan via WA</a>
+       ${approvalInfo.keGrup
+          ? `<div class="ket-grup">WhatsApp akan terbuka dengan pesan siap kirim —
+               pilih ${approvalInfo.nama || 'grup management'} dari daftar chat.</div>`
+          : ''}`
+    : (bukanTermurah
+        ? `<div class="peringatan-kecil">Perlu persetujuan, tapi tujuannya belum diatur di
+             Code.gs — isi WA_APPROVAL, atau set APPROVAL_KE_GRUP = true kalau mau
+             dikirim ke grup.</div>`
+        : '');
+
+  const w = document.createElement('div');
+  w.className = 'tirai';
+  w.id = 'tirai-menang';
+  w.innerHTML = `
+    <div class="jendela">
+      <span class="tanda-menang">PEMENANG DIPILIH</span>
+      <h2>${namaEks}</h2>
+      <div class="rinci">
+        ${noOrder ? `<div><span class="label">No Order</span><br><b>${noOrder}</b></div>` : ''}
+        <div style="margin-top:7px;"><span class="label">Tujuan</span><br>Cikande &rarr; ${l ? l.kota : '-'}</div>
+        ${win ? `<div style="margin-top:7px;"><span class="label">Harga</span><br><b>${formatRupiah(win.harga)}</b></div>` : ''}
+        <div style="margin-top:7px;"><span class="label">Tanggal Muat</span><br><b>${l ? (l.tanggalMuat || l.tanggal || '-') : '-'}</b></div>
+      </div>
+      ${blokApproval}
+      <div class="langkah-order">
+        <b>Langkah berikutnya: buat order</b>
+        Memilih pemenang hanya menetapkan harganya. <b>No Order belum dibuat</b>,
+        jadi link konfirmasi belum bisa dikirim dan barisnya belum masuk ke Pesanan Armada.
+        <br><br>Buat ordernya sekarang — boleh lebih dari satu kalau kirimannya beberapa kali.
+      </div>
+      <button class="btn-wa-besar" style="background:var(--navy);border:none;width:100%;"
+        onclick="tutupJendelaMenang(); gantiTabAdmin('kiriman'); buatOrderCepat('${idLelang}');">
+        Buat order sekarang</button>
+      ${eks && eks.wa ? '' :
+        `<div class="peringatan-kecil">Nomor WA ${namaEks} belum terdaftar —
+           lengkapi di Daftar Ekspedisi supaya link konfirmasi bisa dikirim.</div>`}
+      <button class="btn-nanti" onclick="tutupJendelaMenang(); gantiTabAdmin('kiriman');">Nanti saja, buka tab Kiriman</button>
+    </div>`;
+  w.onclick = (ev) => { if(ev.target === w) tutupJendelaMenang(); };
+  document.body.appendChild(w);
+}
+
+function tutupJendelaMenang(){
+  const w = document.getElementById('tirai-menang');
+  if(w) w.remove();
+}
+
+function pesanSiaran(eks){
+  const terbuka = lelangList.filter(l => l.status !== 'selesai');
+  if(terbuka.length === 0) return '';
+
+  const rincian = terbuka.slice(0, 12).map(l =>
+    `• ${l.kota} — ${l.tipeMobil} (muat ${l.tanggalMuat || l.tanggal})`).join('\n');
+  const sisa = terbuka.length > 12 ? `\n• dan ${terbuka.length - 12} lainnya` : '';
+
+  const tutup = terbuka
+    .map(l => l.batasWaktu).filter(x => x)
+    .sort((a,b) => a - b)[0];
+  const barisTutup = tutup ? `\nBatas isi harga paling dekat: ${tanggalTutup(tutup)}` : '';
+
+  return [
+    `Halo ${eks.nama}, ada ${terbuka.length} lelang kiriman terbuka di UNIFAM:`,
+    ``,
+    rincian + sisa,
+    barisTutup,
+    ``,
+    `Silakan isi harga penawaran di:`,
+    linkUntuk(eks.nama),
+    ``,
+    `User: ${eks.user || eks.nama}`,
+    `Password sudah dikirim sebelumnya. Kalau lupa, hubungi admin.`
+  ].filter(x => x !== '').join('\n');
+}
+
+function bukaSiaran(){
+  const terbuka = lelangList.filter(l => l.status !== 'selesai');
+  if(terbuka.length === 0){ setStatus('Tidak ada lelang terbuka untuk disiarkan.', true); return; }
+
+  const punyaWA = daftarEkspedisi.filter(e => e.wa);
+  const tanpaWA = daftarEkspedisi.filter(e => !e.wa);
+
+  const w = document.createElement('div');
+  w.className = 'tirai';
+  w.id = 'tirai-siar';
+  w.innerHTML = `
+    <div class="jendela" style="max-width:440px;">
+      <h2>Beritahu semua ekspedisi</h2>
+      <p style="font-size:12.5px;color:var(--muted);margin:4px 0 14px;line-height:1.6;">
+        ${terbuka.length} lelang terbuka akan diberitahukan ke ${punyaWA.length} ekspedisi.
+        WhatsApp terbuka satu per satu — tekan kirim di tiap jendela, lalu kembali ke sini.
+      </p>
+      ${tanpaWA.length ? `<div class="peringatan-kecil">${tanpaWA.length} ekspedisi dilewati karena nomor WA belum diisi: ${tanpaWA.map(e => e.nama).join(', ')}</div>` : ''}
+      <div class="daftar-siar">
+        ${punyaWA.map((e,i) => `
+          <div class="baris-siar" id="siar-${i}">
+            <span class="urut">${i+1}</span>
+            <span class="nama-siar">${e.nama}</span>
+            <a class="btn-wa-kecil" href="https://wa.me/${e.wa}?text=${encodeURIComponent(pesanSiaran(e))}"
+               target="_blank" onclick="tandaiTerkirim(${i})">Kirim</a>
+          </div>`).join('')}
+      </div>
+      <button class="btn-nanti" onclick="tutupSiaran()">Tutup</button>
+    </div>`;
+  w.onclick = (ev) => { if(ev.target === w) tutupSiaran(); };
+  document.body.appendChild(w);
+}
+
+function tandaiTerkirim(i){
+  const el = document.getElementById('siar-' + i);
+  if(el) el.classList.add('terkirim');
+}
+function tutupSiaran(){
+  const w = document.getElementById('tirai-siar');
+  if(w) w.remove();
+}
+
+let usulRate = [];
+
+async function bukaUsulRate(){
+  try{
+    setStatus('Menyusun usulan dari hasil lelang…');
+    const r = await gas({action:'rate_usul'});
+    usulRate = r.usul || [];
+    setStatus(`${usulRate.length} usulan perubahan rate · ${r.jumlahRate} baris di tab Rate`);
+    gambarUsulRate();
+  }catch(err){ setStatus('Gagal menyusun usulan: ' + err.message, true); }
+}
+
+function gambarUsulRate(){
+  const w = document.createElement('div');
+  w.className = 'tirai';
+  w.id = 'tirai-rate';
+
+  if(usulRate.length === 0){
+    w.innerHTML = `<div class="jendela">
+      <h2>Perbarui tab Rate</h2>
+      <p style="font-size:13px;color:var(--muted);margin:6px 0 16px;line-height:1.6;">
+        Tidak ada yang perlu diubah — harga pemenang di semua rute sudah sama dengan
+        isi tab Rate.</p>
+      <button class="btn-nanti" onclick="tutupUsulRate()">Tutup</button>
+    </div>`;
+  } else {
+    const baris = usulRate.map((u,i) => {
+      const tag = u.jenis === 'turun' ? `<span class="tag-turun">turun ${formatRupiah(Math.abs(u.selisih))}</span>`
+                : u.jenis === 'naik'  ? `<span class="tag-naik">naik ${formatRupiah(u.selisih)}</span>`
+                : `<span class="tag-baru">rute baru</span>`;
+      return `<tr>
+        <td><input type="checkbox" class="cek-usul" id="u-${i}" ${u.jenis === 'turun' ? 'checked' : ''}></td>
+        <td><b>${u.kota}</b><br><span style="font-family:var(--mono);font-size:10.5px;color:var(--muted);">${u.tipeMobil || '(semua tipe)'}</span></td>
+        <td class="kanan">${u.hargaLama ? formatRupiah(u.hargaLama) : '—'}</td>
+        <td class="kanan"><b>${formatRupiah(u.hargaBaru)}</b></td>
+        <td>${tag}</td>
+        <td style="font-family:var(--mono);font-size:10.5px;color:var(--muted);">${u.ekspedisi}<br>${u.tanggal}</td>
+      </tr>`;
+    }).join('');
+
+    const turun = usulRate.filter(u => u.jenis === 'turun').length;
+    const naik  = usulRate.filter(u => u.jenis === 'naik').length;
+    const baru  = usulRate.filter(u => u.jenis === 'baru').length;
+
+    w.innerHTML = `<div class="jendela lebar">
+      <h2>Perbarui tab Rate</h2>
+      <p style="font-size:13px;color:var(--muted);margin:6px 0 14px;line-height:1.6;">
+        Diambil dari <b>harga pemenang</b> lelang terakhir tiap rute — bukan penawaran
+        termurah yang tidak jadi dipakai. Yang turun sudah dicentang; yang naik dan rute
+        baru sengaja tidak, silakan periksa dulu.</p>
+
+      <div class="usul-kop">
+        <span style="font-family:var(--mono);font-size:11.5px;color:var(--muted);">
+          ${turun} turun · ${naik} naik · ${baru} rute baru</span>
+        <button class="pilih-cepat" onclick="centangUsul(true)">Centang semua</button>
+        <button class="pilih-cepat" onclick="centangUsul(false)">Kosongkan</button>
+      </div>
+
+      <div class="tabel-usul">
+        <table>
+          <thead><tr><th></th><th>Rute</th><th class="kanan">Rate lama</th>
+            <th class="kanan">Rate baru</th><th>Perubahan</th><th>Sumber</th></tr></thead>
+          <tbody>${baris}</tbody>
+        </table>
+      </div>
+
+      <div class="baris-tombol">
+        <button class="btn-primary" style="flex:1;" id="btn-terap" onclick="terapkanUsulRate()">Terapkan yang dicentang</button>
+        <button class="btn-nanti" style="width:auto;margin:0;" onclick="tutupUsulRate()">Batal</button>
+      </div>
+    </div>`;
+  }
+
+  w.onclick = ev => { if(ev.target === w) tutupUsulRate(); };
+  document.body.appendChild(w);
+}
+
+function centangUsul(on){
+  usulRate.forEach((u,i) => {
+    const c = document.getElementById('u-' + i);
+    if(c) c.checked = on;
+  });
+}
+
+function tutupUsulRate(){
+  const w = document.getElementById('tirai-rate');
+  if(w) w.remove();
+}
+
+async function terapkanUsulRate(){
+  const pilih = usulRate.filter((u,i) => {
+    const c = document.getElementById('u-' + i);
+    return c && c.checked;
+  });
+  if(pilih.length === 0){ setStatus('Belum ada baris yang dicentang.', true); return; }
+
+  const btn = document.getElementById('btn-terap');
+  if(btn) btn.disabled = true;
+  try{
+    setStatus(`Menulis ${pilih.length} baris ke tab Rate…`);
+    const r = await gas({action:'rate_terapkan', kunci: pilih.map(u => u.kunci).join('||')});
+    tutupUsulRate();
+    await muat(true);
+    setStatus(`Tab Rate diperbarui — ${r.diubah} diubah, ${r.ditambah} ditambahkan.`);
+  }catch(err){
+    setStatus('Gagal memperbarui: ' + err.message, true);
+    if(btn) btn.disabled = false;
+  }
+}
+
+/* tanggal hari ini/besok dalam bentuk yyyy-mm-dd untuk kolom tanggal */
+function sokISO(d){
+  const p = n => String(n).padStart(2,'0');
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+}
+
+async function perpanjang(idLelang){
+  const tgl = document.getElementById('pjg-tgl-' + idLelang);
+  const jam = document.getElementById('pjg-jam-' + idLelang);
+  if(!tgl || !jam || !tgl.value || !jam.value){
+    setStatus('Tanggal dan jam tutup baru harus diisi.', true); return;
+  }
+  const [th, bl, hr] = tgl.value.split('-').map(Number);
+  const [jj, mm] = jam.value.split(':').map(Number);
+  const baru = new Date(th, bl - 1, hr, jj, mm, 0, 0);
+
+  if(isNaN(baru.getTime())){ setStatus('Tanggal tidak terbaca.', true); return; }
+  if(baru.getTime() <= Date.now()){
+    if(!confirm('Waktu yang dipilih sudah lewat.\n\nLelang akan tetap tertutup. Lanjutkan?')) return;
+  }
+
+  const l = lelangList.find(x => x.id === idLelang);
+  const nama = l ? l.kota : idLelang;
+  if(!confirm(`Buka lagi lelang ${nama}?\n\nTutup baru: ${tanggalTutup(baru.getTime())}\n\nEkspedisi bisa mengisi harga lagi sampai waktu itu.`)) return;
+
+  try{
+    setStatus('Memperpanjang batas waktu…');
+    const r = await gas({action:'ubah_batas', idLelang, batasWaktu: baru.getTime()});
+    await muat(true);
+    setStatus(r.dibukaLagi
+      ? `Lelang ${nama} dibuka lagi sampai ${tanggalTutup(baru.getTime())}.`
+      : `Batas waktu ${nama} diubah jadi ${tanggalTutup(baru.getTime())}.`);
+  }catch(err){ setStatus('Gagal memperpanjang: ' + err.message, true); }
+}
+
+/* Link konfirmasi untuk SATU order */
+function linkKonfirmasiOrder(order, ekspedisi){
+  const kunci = order.caraLama
+    ? `id=${encodeURIComponent(order.idLelang)}`      // link cara lama
+    : `order=${encodeURIComponent(order.id)}`;
+  return `${BASE_URL}/konfirmasi.html?${kunci}&ekspedisi=${encodeURIComponent(ekspedisi)}`;
+}
+
+/* v108: dokumen SPK (bukti harga) untuk satu order */
+function linkSpkOrder(order, ekspedisi){
+  /* terima nama ATAU objek ekspedisi {nama, wa} */
+  const nama = (ekspedisi && typeof ekspedisi === 'object') ? ekspedisi.nama : ekspedisi;
+  return linkKonfirmasiOrder(order, nama || '').replace('/konfirmasi.html?', '/spk.html?');
+}
+
+function waKonfirmasiOrder(l, order, eks){
+  const rinci = [
+    `No Order   : ${order.noOrder}`,
+    `Tujuan     : Cikande -> ${l.kota}`,
+    `Distributor: ${l.customer}`,
+    `Tipe       : ${l.tipeMobil}`,
+    `Tgl muat   : ${order.tanggalMuat || '-'}`,
+    order.harga ? `Harga      : ${formatRupiah(order.harga)}` : ''
+  ].filter(x => x).join('\n');
+
+  /* bagian dipisah baris kosong supaya enak dibaca di WhatsApp */
+  const teks = [
+    `Halo ${eks.nama}, order kiriman UNIFAM:`,
+    rinci,
+    `Mohon isi data armada di link berikut:\n${linkKonfirmasiOrder(order, eks.nama)}`,
+    `Mohon sebutkan No Order *${order.noOrder}* kalau ada yang perlu ditanyakan.\nTerima kasih.`
+  ].join('\n\n');
+
+  return `https://wa.me/${eks.wa}?text=${encodeURIComponent(teks)}`;
+}
+
+/* Semua order (dari seluruh lelang) beserta lelangnya, untuk tampilan per tanggal */
+function semuaOrderGabung(){
+  const out = [];
+  lelangList.filter(l => l.status === 'selesai').forEach(l => {
+    orderUntuk(l.id).forEach(o => out.push({ o, l }));
+  });
+  return out.sort((a,b) => urutTanggal(a.o.tanggalMuat) - urutTanggal(b.o.tanggalMuat));
+}
+
+function pilihKota(k){ kotaPilih = k; tujuanPilih = ''; render(); }
+function pilihKotaK(k){ kotaPilihK = k; render(); }
+function pilihTujuan(t){ tujuanPilih = t; render(); }
+
+/* Nama tujuan yang dipakai konsisten di semua tempat: "Distributor - Kota" */
+function namaTujuan(l){ return `${l.customer} - ${l.kota}`; }
+
+/* Kotak pilihan tujuan — lebih spesifik daripada kota, karena satu kota
+   bisa punya beberapa distributor tujuan yang berbeda */
+function barisTujuanLelang(terbuka){
+  if(terbuka.length === 0) return '';
+  const hitung = new Map();
+  terbuka.forEach(l => { const t = namaTujuan(l); hitung.set(t, (hitung.get(t) || 0) + 1); });
+  if(hitung.size < 2) return '';
+
+  const tujuan = Array.from(hitung.keys()).sort();
+  return `<div class="bar-tanggal">
+    <span class="bt-l">Tujuan</span>
+    <select class="pilih-tgl" onchange="pilihTujuan(this.value)">
+      <option value="">Semua tujuan — ${terbuka.length} lelang</option>
+      ${tujuan.map(t => `<option value="${t}" ${tujuanPilih === t ? 'selected' : ''}>${t} — ${hitung.get(t)}</option>`).join('')}
+    </select>
+    ${tujuanPilih ? `<button class="btn-reset-tgl" onclick="pilihTujuan('')">tampilkan semua</button>` : ''}
+  </div>`;
+}
+
+/* Kotak pilihan kota untuk daftar lelang terbuka */
+function barisKotaLelang(terbuka){
+  if(terbuka.length === 0) return '';
+  const hitung = new Map();
+  terbuka.forEach(l => hitung.set(l.kota, (hitung.get(l.kota) || 0) + 1));
+  if(hitung.size < 2) return '';
+
+  const kota = Array.from(hitung.keys()).sort();
+  return `<div class="bar-tanggal">
+    <span class="bt-l">Kota</span>
+    <select class="pilih-tgl" onchange="pilihKota(this.value)">
+      <option value="">Semua kota — ${terbuka.length} lelang</option>
+      ${kota.map(k => `<option value="${k}" ${kotaPilih === k ? 'selected' : ''}>${k} — ${hitung.get(k)}</option>`).join('')}
+    </select>
+    ${kotaPilih ? `<button class="btn-reset-tgl" onclick="pilihKota('')">tampilkan semua</button>` : ''}
+  </div>`;
+}
+
+function pilihTanggal(t){
+  tglPilih = t;
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* Satu kotak pilihan tanggal — lebih ringkas daripada deretan tombol
+   kalau tanggalnya sudah banyak. */
+function barisTanggal(){
+  const semua = semuaOrderGabung().filter(x => x.o.status !== 'batal');
+  if(semua.length === 0) return '';
+
+  const hitung = new Map();
+  semua.forEach(x => {
+    const t = x.o.tanggalMuat || '(tanpa tanggal)';
+    hitung.set(t, (hitung.get(t) || 0) + 1);
+  });
+
+  const hitungKota = new Map();
+  semua.forEach(x => hitungKota.set(x.l.kota, (hitungKota.get(x.l.kota) || 0) + 1));
+  const kotaK = Array.from(hitungKota.keys()).sort();
+
+  const tgl = Array.from(hitung.keys()).sort((a,b) => urutTanggal(a) - urutTanggal(b));
+  const opsi = tgl.map(t =>
+    `<option value="${t}" ${tglPilih === t ? 'selected' : ''}>${t} — ${hitung.get(t)} order</option>`).join('');
+
+  return `<div class="bar-tanggal">
+    <span class="bt-l">Tanggal muat</span>
+    <select class="pilih-tgl" onchange="pilihTanggal(this.value)">
+      <option value="">Semua tanggal — ${semua.length} order</option>
+      ${opsi}
+    </select>
+    <span class="bt-l" style="margin-left:6px;">Kota</span>
+    <select class="pilih-tgl" style="min-width:170px;" onchange="pilihKotaK(this.value)">
+      <option value="">Semua kota</option>
+      ${kotaK.map(k => `<option value="${k}" ${kotaPilihK === k ? 'selected' : ''}>${k} — ${hitungKota.get(k)}</option>`).join('')}
+    </select>
+    ${(tglPilih || kotaPilihK)
+      ? `<button class="btn-reset-tgl" onclick="pilihTanggal('');pilihKotaK('')">tampilkan semua</button>` : ''}
+  </div>`;
+}
+
+/* Daftar rata semua kiriman di satu tanggal, lintas lelang */
+function tabelPerTanggal(){
+  const semua = semuaOrderGabung().filter(x =>
+    x.o.status !== 'batal' &&
+    (!tglPilih || (x.o.tanggalMuat || '(tanpa tanggal)') === tglPilih) &&
+    (!kotaPilihK || x.l.kota === kotaPilihK));
+
+  const judulSaring = [tglPilih, kotaPilihK].filter(x => x).join(' · ');
+
+  /* lelang yang sudah ada pemenangnya tapi BELUM dibuatkan order — kalau tidak
+     ditampilkan, lelang seperti ini seolah hilang dari panel */
+  const belumOrder = lelangList.filter(l =>
+    l.status === 'selesai' && l.pemenang &&
+    (!kotaPilihK || l.kota === kotaPilihK) &&
+    orderUntuk(l.id).filter(o => o.status !== 'batal').length === 0);
+
+  const blokBelum = belumOrder.length ? `
+    <div class="tanpa-order" style="margin-top:14px;">
+      <b>${belumOrder.length} lelang belum dibuatkan order</b>
+      Pemenangnya sudah dipilih tapi No Order belum dibuat, jadi belum muncul di daftar
+      kiriman mana pun: ${belumOrder.map(l => l.kota + ' (' + l.pemenang + ')').join(', ')}.
+      Buat ordernya lewat panel di bawah.
+    </div>` : '';
+
+  if(semua.length === 0){
+    return `<div class="empty" style="padding:26px;text-align:center;">
+      Belum ada kiriman untuk ${judulSaring || 'saringan ini'}.</div>
+      ${blokBelum}${panelBuatOrder()}`;
+  }
+
+  const baris = semua.map(({o, l}) => {
+    const k = konfirmasiList.find(x => x.idLelang === o.id);
+    const eks = daftarEkspedisi.find(e => e.nama.toUpperCase() === (l.pemenang||'').toUpperCase());
+    const hrg = o.harga || (bidsUntuk(l.id).find(b => b.ekspedisi === l.pemenang) || {}).harga || 0;
+    const batal = o.status === 'batal';
+    return `<tr>
+      <td>${batal ? '' : `<input type="checkbox" class="cek-order"
+          ${terpilihOrder.has(o.id) ? 'checked' : ''}
+          onchange="togglePilihOrder('${o.id}', this)" title="pilih untuk digabung combo">`}</td>
+      <td class="mono">${o.noOrder}${labelComboOrder(o)}</td>
+      <td style="font-weight:600;">${l.customer}</td>
+      <td class="mono">${l.kota}</td>
+      <td class="mono">${l.tipeMobil}</td>
+      <td>${l.pemenang || '—'}</td>
+      <td class="kanan">${hrg ? formatRupiah(hrg) : '—'}${!batal
+        ? ` <button class="btn-ubah-harga" title="ubah harga order ini"
+            onclick="ubahHargaOrder('${o.id}','${o.noOrder}',${hrg})">ubah</button>` : ''}</td>
+      <td class="mono">${k ? (k.noKontener || k.noPolisi || '—') : '—'}</td>
+      <td>${k ? `<span class="pil-ok">Sudah konfirmasi</span>` : `<span class="pil-nunggu">Menunggu</span>`}</td>
+      <td class="kanan">${eks && !k
+        ? `<a class="tautan-kecil" target="_blank" href="${waKonfirmasiOrder(l, o, eks)}">kirim WA</a>` : ''}
+        ${(o.ekspedisi || l.pemenang) ? `<a class="tautan-kecil" target="_blank" href="${linkSpkOrder(o, o.ekspedisi || l.pemenang)}" title="dokumen SPK / bukti harga">SPK</a>` : ''}</td>
+      <td class="kanan" style="white-space:nowrap;">${!batal
+        ? `${tombolAlihMini(l)} <button class="btn-mini merah" title="batalkan order ini"
+             onclick="batalOrder('${o.id}','${o.noOrder}','${l.kota}')">batal</button>`
+        : '<span class="pil-batal">dibatalkan</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  const belum = semua.filter(({o}) => !konfirmasiList.find(x => x.idLelang === o.id)).length;
+  const total = semua.reduce((a, {o, l}) =>
+    a + (o.harga || (bidsUntuk(l.id).find(b => b.ekspedisi === l.pemenang) || {}).harga || 0), 0);
+
+  return `<div class="section-title">
+      <h2>Kiriman ${judulSaring}</h2>
+      <small>${semua.length} order · ${belum} belum konfirmasi · total ${formatRupiah(total)}</small>
+    </div>
+    <div class="panel-box" style="padding:0;"><div class="gulir">
+      <table class="tabel-order" style="min-width:880px;">
+        <thead><tr><th></th><th>No Order</th><th>Distributor</th><th>Kota</th><th>Tipe</th>
+          <th>Ekspedisi</th><th class="kanan">Harga</th><th>Kontener / Polisi</th>
+          <th>Status</th><th></th><th></th></tr></thead>
+        <tbody>${baris}</tbody>
+      </table>
+    </div></div>
+    ${blokBelum}${panelBuatOrder()}`;
+}
+
+/* Saat sedang menyaring, tombol "+ Buat order baru" di kartu tidak kelihatan.
+   Panel ini menggantikannya: daftar lelang yang sudah ada pemenangnya,
+   masing-masing bisa langsung dibuatkan order. */
+function panelBuatOrder(){
+  let siap = lelangList.filter(l => l.status === 'selesai' && l.pemenang);
+  if(kotaPilihK) siap = siap.filter(l => l.kota === kotaPilihK);
+  if(siap.length === 0) return '';
+
+  siap.sort((a,b) => (a.kota || '').localeCompare(b.kota || ''));
+
+  const baris = siap.map(l => {
+    const aktif = orderUntuk(l.id).filter(o => o.status !== 'batal');
+    const jml = aktif.length;
+
+    /* berapa order yang sudah ada di tanggal yang sedang disaring — hanya
+       keterangan, tombolnya TETAP bisa ditekan karena satu rute memang
+       bisa dikirim berkali-kali di tanggal yang sama */
+    const diTgl = tglPilih ? aktif.filter(o => o.tanggalMuat === tglPilih).length : 0;
+    const terakhir = aktif.length
+      ? aktif[aktif.length - 1].tanggalMuat : '';
+
+    return `<tr>
+      <td style="font-weight:600;">${l.customer}</td>
+      <td class="mono">${l.kota}</td>
+      <td class="mono">${l.tipeMobil}</td>
+      <td>${l.pemenang}</td>
+      <td class="kanan">${(() => {
+        const b = bidsUntuk(l.id).find(x => x.ekspedisi === l.pemenang);
+        return b ? formatRupiah(b.harga) : '—';
+      })()}</td>
+      <td class="mono">${jml} order${terakhir ? `<br><span class="ket-kecil">terakhir ${terakhir}</span>` : ''}</td>
+      <td class="kanan" style="white-space:nowrap;">
+        ${l.approval === 'MENUNGGU' ? aksiApprovalMini(l) : `
+        ${diTgl ? `<span class="ket-ada">sudah ${diTgl}x di ${tglPilih}</span>` : ''}
+        ${tombolAlihMini(l)}
+        <button class="btn-mini biru" onclick="buatOrderCepat('${l.id}')">+ buat order${
+          tglPilih ? ' ' + tglPilih : ''}</button>`}
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `<div class="section-title" style="margin-top:22px;">
+      <h2>Buat order baru</h2>
+      <small>${siap.length} lelang siap${kotaPilihK ? ' di ' + kotaPilihK : ''}${
+        tglPilih ? ' · tanggal ' + tglPilih : ''}</small>
+    </div>
+    <div class="panel-box" style="padding:0;"><div class="gulir">
+      <table class="tabel-order" style="min-width:700px;">
+        <thead><tr><th>Distributor</th><th>Kota</th><th>Tipe</th><th>Ekspedisi</th>
+          <th class="kanan">Harga</th><th>Sudah dibuat</th><th></th></tr></thead>
+        <tbody>${baris}</tbody>
+      </table>
+    </div></div>`;
+}
+
+/* Kalau sedang menyaring tanggal, tanggalnya langsung dipakai tanpa mengetik lagi */
+async function buatOrderCepat(idLelang){
+  const l = lelangList.find(x => x.id === idLelang);
+  if(!l) return;
+
+  let tgl = tglPilih;
+  if(!tgl){
+    const isi = prompt(`Buat order ${l.kota} — ${l.tipeMobil}\nEkspedisi: ${l.pemenang}\n\n` +
+                       `Tanggal muat (dd/mm/yyyy):`, l.tanggalMuat || l.tanggal || '');
+    if(isi === null) return;
+    tgl = String(isi).trim();
+  } else {
+    const sudah = orderUntuk(idLelang).filter(o => o.status !== 'batal' && o.tanggalMuat === tgl);
+    const catatan = sudah.length
+      ? `\n\nCATATAN: sudah ada ${sudah.length} order untuk rute ini di tanggal yang sama` +
+        `\n(${sudah.map(o => o.noOrder).join(', ')}).` +
+        `\nLanjutkan kalau memang mau menambah kiriman.`
+      : '';
+    if(!confirm(`Buat order untuk ${l.customer} — ${l.kota} (${l.tipeMobil})?\n\n` +
+                `Ekspedisi: ${l.pemenang}\nTanggal muat: ${tgl}` + catatan)) return;
+  }
+
+  if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(tgl)){
+    setStatus('Tanggal harus dd/mm/yyyy, contoh 24/08/2026.', true); return;
+  }
+
+  try{
+    setStatus('Membuat order…');
+    const r = await gas({action:'order_buat', idLelang, tanggalMuat: tgl});
+    await muat(true);
+    if(r.kirim && String(r.kirim).indexOf('GAGAL') === 0){
+      setStatus(`Order ${r.noOrder} dibuat, TAPI gagal kirim ke Pesanan Armada — ${r.kirim}`, true);
+    } else {
+      setStatus(`Order ${r.noOrder} dibuat untuk ${l.kota} muat ${r.tanggalMuat}.`);
+    }
+  }catch(err){ setStatus('Gagal membuat order: ' + err.message, true); }
+}
+
+function orderUntuk(idLelang){
+  const asli = daftarOrder.filter(o => o.idLelang === idLelang);
+  if(asli.length) return asli.sort((a,b) => urutTanggal(a.tanggalMuat) - urutTanggal(b.tanggalMuat));
+
+  /* Lelang dari sebelum ada tab Order tidak punya baris Order, tapi No Order
+     dan konfirmasinya sudah ada. Tampilkan sebagai satu baris supaya datanya
+     tidak hilang dari panel. */
+  const l = lelangList.find(x => x.id === idLelang);
+  if(!l || !l.noOrder) return [];
+
+  return String(l.noOrder).split(',').map(n => n.trim()).filter(n => n).map((no, i) => ({
+    id: l.id,                       // konfirmasi lama dikunci pakai ID lelang
+    idLelang: l.id,
+    noOrder: no,
+    ekspedisi: l.pemenang || '',
+    tanggalMuat: l.tanggalMuat || l.tanggal || '',
+    harga: 0,
+    status: 'lama',
+    caraLama: true,
+    urutan: i
+  }));
+}
+
+async function buatOrder(idLelang){
+  const l = lelangList.find(x => x.id === idLelang);
+  if(!l) return;
+
+  /* tawarkan tanggal rencana dari planning yang belum dipakai */
+  const dipakai = new Set(orderUntuk(idLelang).map(o => o.tanggalMuat));
+  const rencana = String(l.tanggalSemua || '').split(',').map(x => x.trim())
+                    .filter(x => x && !dipakai.has(x));
+  const usul = rencana[0] || l.tanggalMuat || l.tanggal || '';
+
+  const isi = prompt(
+    `Buat order baru untuk ${l.kota} — ${l.tipeMobil}\n` +
+    `Ekspedisi: ${l.pemenang}\n\n` +
+    (rencana.length ? `Tanggal rencana yang belum dipakai: ${rencana.join(', ')}\n\n` : '') +
+    `Tanggal muat (dd/mm/yyyy):`, usul);
+
+  if(isi === null) return;
+  const tgl = String(isi).trim();
+  if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(tgl)){
+    setStatus('Tanggal harus berbentuk dd/mm/yyyy, contoh 14/08/2026.', true);
+    return;
+  }
+
+  try{
+    setStatus('Membuat order…');
+    const r = await gas({action:'order_buat', idLelang, tanggalMuat: tgl});
+    await muat(true);
+    if(r.kirim && String(r.kirim).indexOf('GAGAL') === 0){
+      setStatus(`Order ${r.noOrder} dibuat, TAPI gagal kirim ke Pesanan Armada — ${r.kirim}`, true);
+    } else {
+      setStatus(`Order ${r.noOrder} dibuat untuk muat ${r.tanggalMuat} & terkirim ke planning draft.`);
+    }
+  }catch(err){ setStatus('Gagal membuat order: ' + err.message, true); }
+}
+
+/* Untuk kasus mis. combo: bukan potongan gabungan, tapi tiap kontener
+   sendiri harganya turun karena dipesan bareng. Wajib alasan. */
+function angkaSaja(v){
+  const d = String(v == null ? '' : v).replace(/[^0-9]/g, '');
+  return d ? parseInt(d, 10) : 0;
+}
+function tampilAngka(v){
+  const n = angkaSaja(v);
+  return n > 0 ? n.toLocaleString('id-ID') : '';
+}
+
+/* Untuk kiriman yang order-nya dibuat LANGSUNG di Pesanan Armada, tanpa
+   lewat tombol "+ Buat order baru" — tidak ada baris Order kita untuk
+   diubah, jadi harganya dikoreksi di level lelang sebagai gantinya. */
+async function ubahHargaLelang(idLelang, kota, hargaSekarang){
+  const isiHarga = prompt(
+    `Ubah harga lelang ${kota}\n\n` +
+    `Ini untuk kiriman yang order-nya dibuat LANGSUNG di Pesanan Armada\n` +
+    `(bukan lewat tombol "+ Buat order baru" di sini).\n\n` +
+    `Sekarang: ${formatRupiah(hargaSekarang)}\n\n` +
+    `Harga baru (angka saja):`, tampilAngka(hargaSekarang));
+  if(isiHarga === null) return;
+  const hargaBaru = angkaSaja(isiHarga);
+  if(!hargaBaru){ setStatus('Harga baru harus diisi.', true); return; }
+  if(hargaBaru === hargaSekarang) return;
+
+  const alasan = prompt(
+    `Alasan perubahan harga ${kota}\n\n` +
+    `${formatRupiah(hargaSekarang)} -> ${formatRupiah(hargaBaru)}\n\n` +
+    `Alasan (wajib diisi, mis. "hasil nego, order dibuat langsung di Pesanan Armada"):`,
+    'hasil nego, order dibuat langsung di Pesanan Armada');
+  if(alasan === null) return;
+  if(!String(alasan).trim()){ setStatus('Alasan wajib diisi.', true); return; }
+
+  try{
+    setStatus('Mengubah harga…');
+    const r = await gas({action:'lelang_ubah_harga', idLelang,
+                         hargaBaru: hargaBaru, alasan: String(alasan).trim()});
+    await muat(true);
+    setStatus(`${r.kota} diubah dari ${formatRupiah(r.hargaLama)} ke ${formatRupiah(r.hargaBaru)}.`);
+  }catch(err){ setStatus('Gagal mengubah harga: ' + err.message, true); }
+}
+
+async function ubahHargaOrder(idOrder, noOrder, hargaSekarang){
+  const isiHarga = prompt(
+    `Ubah harga ${noOrder}\n\n` +
+    `Sekarang: ${formatRupiah(hargaSekarang)}\n\n` +
+    `Harga baru (angka saja):`, tampilAngka(hargaSekarang));
+  if(isiHarga === null) return;
+  const hargaBaru = angkaSaja(isiHarga);
+  if(!hargaBaru){ setStatus('Harga baru harus diisi.', true); return; }
+  if(hargaBaru === hargaSekarang) return;
+
+  const alasan = prompt(
+    `Alasan perubahan harga ${noOrder}\n\n` +
+    `${formatRupiah(hargaSekarang)} -> ${formatRupiah(hargaBaru)}\n\n` +
+    `Alasan (wajib diisi, mis. "potongan combo per kontener"):`, 'potongan combo per kontener');
+  if(alasan === null) return;
+  if(!String(alasan).trim()){ setStatus('Alasan wajib diisi.', true); return; }
+
+  try{
+    setStatus('Mengubah harga…');
+    const r = await gas({action:'order_ubah_harga', idOrder,
+                         hargaBaru: hargaBaru, alasan: String(alasan).trim()});
+    await muat(true);
+    setStatus(`${r.noOrder} diubah dari ${formatRupiah(r.hargaLama)} ke ${formatRupiah(r.hargaBaru)}.` +
+              (r.jejak ? ` Ikut diubah di: ${r.jejak}.` : ' Belum ada barisnya di Pesanan Armada.'));
+  }catch(err){ setStatus('Gagal mengubah harga: ' + err.message, true); }
+}
+
+async function geserTanggal(idOrder, noOrder, tglSekarang){
+  const isi = prompt(
+    `Geser tanggal muat ${noOrder}\n\n` +
+    `Sekarang: ${tglSekarang}\n\n` +
+    `Tanggal baru (dd/mm/yyyy):`, tglSekarang);
+  if(isi === null) return;
+  const tgl = String(isi).trim();
+  if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(tgl)){
+    setStatus('Tanggal harus dd/mm/yyyy, contoh 24/08/2026.', true); return;
+  }
+  if(tgl === tglSekarang) return;
+
+  try{
+    setStatus('Menggeser tanggal…');
+    const r = await gas({action:'order_tanggal', idOrder, tanggalMuat: tgl});
+    await muat(true);
+    setStatus(`${r.noOrder} digeser dari ${r.tanggalLama} ke ${r.tanggalBaru}.` +
+              (r.jejak ? ` Ikut diubah di: ${r.jejak}.` : ' Belum ada barisnya di Pesanan Armada.'));
+  }catch(err){ setStatus('Gagal menggeser tanggal: ' + err.message, true); }
+}
+
+async function batalOrder(idOrder, noOrder, kota){
+  const alasan = prompt(
+    `Batalkan order ${noOrder} (${kota})?\n\n` +
+    `Barisnya dihapus dari planning draft dan konfirmasi armada di Pesanan Armada.\n` +
+    `Ordernya sendiri tetap tercatat dengan status "batal" sebagai jejak.\n\n` +
+    `Alasan pembatalan:`, 'jadwal digeser');
+  if(alasan === null) return;
+
+  try{
+    setStatus('Membatalkan order…');
+    const r = await gas({action:'order_batal', idOrder, alasan: String(alasan).trim()});
+    await muat(true);
+    setStatus(`Order ${r.noOrder} dibatalkan.${r.jejak ? ' Dibersihkan: ' + r.jejak + '.' : ''}`);
+  }catch(err){ setStatus('Gagal membatalkan: ' + err.message, true); }
+}
+
+async function hapusOrder(idOrder, noOrder, kota){
+  if(!confirm(`Hapus order ${noOrder} (${kota})?\n\n` +
+              `Barisnya juga dihapus dari planning draft dan konfirmasi armada di Pesanan Armada.\n` +
+              `Data konfirmasi dari ekspedisi untuk order ini ikut terhapus.`)) return;
+  try{
+    setStatus('Menghapus order…');
+    const r = await gas({action:'order_hapus', idOrder});
+    await muat(true);
+    setStatus(`Order ${r.noOrder} dihapus.${r.jejak ? ' Dibersihkan: ' + r.jejak + '.' : ''}`);
+  }catch(err){ setStatus('Gagal menghapus order: ' + err.message, true); }
+}
+
+function linkKonfirmasi(idLelang, ekspedisi){
+  return `${BASE_URL}/konfirmasi.html?id=${encodeURIComponent(idLelang)}&ekspedisi=${encodeURIComponent(ekspedisi)}`;
+}
+
+function waKonfirmasi(l, win, eks){
+  const baris = [
+    `Halo ${eks.nama}, penawaran Anda kami PILIH untuk pengiriman berikut:`,
+    ``,
+    l.noOrder ? `No Order  : ${l.noOrder}` : '',
+    `Tujuan    : Cikande -> ${l.kota}`,
+    `Customer  : ${l.customer}`,
+    `Muatan    : ${l.tipeMobil} | ${formatKarton(l.karton)} karton | ${formatCbm(l.cbm)} CBM`,
+    win ? `Harga     : ${formatRupiah(win.harga)}` : '',
+    win && win.namaKapal ? `Kapal     : ${win.namaKapal} (ETD ${win.etd||'-'} / ETA ${win.eta||'-'})` : '',
+    ``,
+    `*Permintaan pick up / muat: ${l.tanggalMuat || l.tanggal || '-'}*`,
+    ``,
+    `Mohon konfirmasi armada & driver lewat link berikut:`,
+    linkKonfirmasi(l.id, eks.nama),
+    ``,
+    `Terima kasih.`
+  ].filter(x => x !== '').join('\n');
+  return `https://wa.me/${eks.wa}?text=${encodeURIComponent(baris)}`;
+}
+
+/* ---------- render ---------- */
+
+let tabAdmin = 'lelang';
+
+/* Panel pemenang sebelumnya — muncul di kartu lelang terbuka kalau ada
+   riwayat pemenang untuk kota+tipe yang sama. Memungkinkan pesan langsung
+   tanpa menunggu penawaran baru masuk. */
+function panelPemenangSebelumnya(l){
+  const p = l.pemenangSebelumnya;
+  if(!p) return '';
+
+  return `<div class="kotak-riwayat">
+    <div class="kr-t">Pemenang sebelumnya di rute ini</div>
+    <div class="kr-isi">
+      <span class="kr-eks">${p.ekspedisi}</span>
+      <span class="kr-harga">${formatRupiah(p.harga)}</span>
+      ${p.tanggalMuat ? `<span class="kr-tgl">terakhir muat ${p.tanggalMuat}</span>` : ''}
+    </div>
+    <button class="btn-riwayat" onclick="pesanLangsung('${l.id}')">
+      Pesan ke ${p.ekspedisi} sekarang</button>
+    <div class="kr-ket">Tanpa menunggu lelang ulang — harga memakai angka terakhir di atas.
+      Ekspedisi tetap boleh menawar seperti biasa kalau kamu ingin membandingkan dulu.</div>
+  </div>`;
+}
+
+/* Tandai pemenang + langsung buat order, memakai harga historis kalau
+   belum ada penawaran baru di lelang ini */
+async function pesanLangsung(idLelang){
+  const l = lelangList.find(x => x.id === idLelang);
+  const p = l && l.pemenangSebelumnya;
+  if(!l || !p) return;
+
+  const inp = document.getElementById('muat-' + idLelang);
+  const tglInput = inp ? inp.value : '';
+  const tgl = tglInput ? new Date(tglInput) : new Date(Date.now() + 86400000);
+  const tglTeks = `${String(tgl.getDate()).padStart(2,'0')}/${String(tgl.getMonth()+1).padStart(2,'0')}/${tgl.getFullYear()}`;
+
+  const bidBaru = bidsUntuk(idLelang).find(b => b.ekspedisi.toUpperCase() === p.ekspedisi.toUpperCase());
+  const hargaDipakai = bidBaru ? bidBaru.harga : p.harga;
+
+  if(!confirm(`Pesan langsung ke ${p.ekspedisi}?\n\n` +
+      `Tujuan     : ${l.customer} - ${l.kota}\n` +
+      `Tipe       : ${l.tipeMobil}\n` +
+      `Tanggal muat: ${tglTeks}\n` +
+      `Harga       : ${formatRupiah(hargaDipakai)}${bidBaru ? '' : ' (harga terakhir, belum ada penawaran baru)'}\n\n` +
+      `Lelang ini langsung ditutup dan order dibuat, tanpa menunggu ekspedisi lain menawar.`)) return;
+
+  try{
+    setStatus('Memesan…');
+    await gas({action:'pilih_pemenang', idLelang, pemenang: p.ekspedisi,
+               tanggalMuat: tglTeks,
+               alasan: 'Dipesan langsung ke pemenang sebelumnya (tanpa lelang ulang)'});
+    const r = await gas({action:'order_buat', idLelang, tanggalMuat: tglTeks,
+                         hargaManual: hargaDipakai});
+    await muat(true);
+    if(r.kirim && String(r.kirim).indexOf('GAGAL') === 0){
+      setStatus(`Order ${r.noOrder} dibuat, TAPI gagal kirim ke Pesanan Armada — ${r.kirim}`, true);
+    } else {
+      setStatus(`Order ${r.noOrder} dibuat langsung untuk ${p.ekspedisi} — ${formatRupiah(hargaDipakai)}, muat ${tglTeks}.`);
+    }
+  }catch(err){ setStatus('Gagal memesan langsung: ' + err.message, true); }
+}
+
+/* ---------- nego harga ---------- */
+/* Keadaan juara bertahan pada satu lelang — dihitung di sisi halaman
+   supaya panel bisa menandai tanpa panggilan server tambahan */
+function cekJuara(l){
+  if(!l.juaraBertahan || !l.hargaKunci) return null;
+  const bids = bidsUntuk(l.id);
+  const juaraNm = String(l.juaraBertahan).toUpperCase();
+
+  let hargaJuara = l.hargaKunci, terendahLain = 0, penantang = '';
+  bids.forEach(b => {
+    if(!b.harga) return;
+    if(b.ekspedisi.toUpperCase() === juaraNm){ hargaJuara = b.harga; return; }
+    if(!terendahLain || b.harga < terendahLain){ terendahLain = b.harga; penantang = b.ekspedisi; }
+  });
+
+  const tertantang = !!(terendahLain && terendahLain < hargaJuara);
+  const diAtasTarget = !!(l.target && terendahLain > l.target);
+  return { juara: l.juaraBertahan, hargaJuara, terendahLain, penantang,
+           tertantang, perluDikabari: tertantang && diAtasTarget };
+}
+
+/* Pesan WA ke juara bertahan — menyebut target rate, bukan harga penantang */
+function waTantang(l, eks){
+  const teks = [
+    `Halo ${eks.nama},`,
+    `Ada penawaran yang lebih rendah untuk rute yang sebelumnya Anda menangkan:`,
+    [`Tujuan     : Cikande -> ${l.kota}`,
+     `Distributor: ${l.customer}`,
+     `Tipe       : ${l.tipeMobil}`,
+     `Tgl muat   : ${l.tanggalMuat || l.tanggal || '-'}`].join('\n'),
+    [`Harga Anda   : ${formatRupiah(l.hargaKunci)}`,
+     `*Target rate : ${l.target ? formatRupiah(l.target) : '-'}*`,
+     l.rateExisting ? `Rate rank 1  : ${formatRupiah(l.rateExisting)} — menyamai angka ini pun masih bisa dipilih` : ''
+    ].filter(x => x).join('\n'),
+    `Harga penawar lain tidak kami sampaikan. Silakan tinjau harga Anda\n` +
+    `sebelum ${tanggalTutup(l.batasWaktu)} lewat link lelang Anda.\n` +
+    `Kalau tidak diubah, harga lama tetap ikut dinilai.`,
+    `Terima kasih.`
+  ].join('\n\n');
+  return `https://wa.me/${eks.wa}?text=${encodeURIComponent(teks)}`;
+}
+
+function bukaNego(idLelang, ekspedisi){
+  const l = lelangList.find(x => x.id === idLelang);
+  const b = bidsUntuk(idLelang).find(x => x.ekspedisi === ekspedisi);
+  const eks = daftarEkspedisi.find(e => e.nama.toUpperCase() === String(ekspedisi).toUpperCase());
+  if(!l || !b) return;
+
+  if(!eks || !eks.wa){
+    setStatus(`Nomor WA ${ekspedisi} belum terdaftar — lengkapi di Daftar Ekspedisi dulu.`, true);
+    return;
+  }
+
+  const semua = bidsUntuk(idLelang);
+  const termurah = semua.length ? semua[0] : null;
+  const target = l.target || 0;
+  const usul = target || (termurah ? termurah.harga : b.harga);
+
+  const w = document.createElement('div');
+  w.className = 'tirai';
+  w.id = 'tirai-nego';
+  w.innerHTML = `
+    <div class="jendela">
+      <span class="tanda-menang">Nego Harga</span>
+      <h2>${ekspedisi}</h2>
+      <div class="rinci">
+        <div><span class="label">Tujuan</span><br>Cikande &rarr; ${l.kota} &middot; ${l.tipeMobil}</div>
+        <div style="margin-top:7px;"><span class="label">Penawaran sekarang</span><br><b>${formatRupiah(b.harga)}</b></div>
+        ${target ? `<div style="margin-top:7px;"><span class="label">Target rate</span><br><b>${formatRupiah(target)}</b></div>` : ''}
+        ${termurah && termurah.ekspedisi !== ekspedisi
+          ? `<div style="margin-top:7px;"><span class="label">Selisih dari termurah</span><br><b>${formatRupiah(b.harga - termurah.harga)}</b> lebih mahal</div>`
+          : ''}
+      </div>
+
+      <div class="kolom" style="margin-bottom:12px;">
+        <label>Harga yang diminta (Rp)</label>
+        <input id="nego-harga" type="text" inputmode="numeric" value="${Number(usul).toLocaleString('id-ID')}"
+               oninput="rapikanNego()">
+      </div>
+      <div class="kolom" style="margin-bottom:14px;">
+        <label>Catatan tambahan (boleh kosong)</label>
+        <input id="nego-catatan" type="text" placeholder="mis. untuk kiriman rutin mingguan">
+      </div>
+
+      <a class="btn-wa-besar" id="btn-nego-wa" target="_blank" href="#"
+         onclick="return siapkanNego('${idLelang}','${ekspedisi}')">Kirim permintaan via WA</a>
+      <button class="btn-nanti" onclick="tutupNego()">Batal</button>
+    </div>`;
+  w.onclick = ev => { if(ev.target === w) tutupNego(); };
+  document.body.appendChild(w);
+  setTimeout(() => { const i = document.getElementById('nego-harga'); if(i){ i.focus(); i.select(); } }, 50);
+}
+
+function rapikanNego(){
+  const i = document.getElementById('nego-harga');
+  if(!i) return;
+  const n = String(i.value).replace(/[^0-9]/g, '');
+  i.value = n ? Number(n).toLocaleString('id-ID') : '';
+}
+
+function tutupNego(){
+  const w = document.getElementById('tirai-nego');
+  if(w) w.remove();
+}
+
+/* dipanggil saat tombol WA ditekan — menyusun pesannya lalu membuka WhatsApp */
+function siapkanNego(idLelang, ekspedisi){
+  const l = lelangList.find(x => x.id === idLelang);
+  const b = bidsUntuk(idLelang).find(x => x.ekspedisi === ekspedisi);
+  const eks = daftarEkspedisi.find(e => e.nama.toUpperCase() === String(ekspedisi).toUpperCase());
+  const minta = Number(String(document.getElementById('nego-harga').value).replace(/[^0-9]/g,'')) || 0;
+  const catatan = document.getElementById('nego-catatan').value.trim();
+
+  if(!minta){ setStatus('Harga yang diminta belum diisi.', true); return false; }
+
+  const bagian = [
+    `Halo ${ekspedisi}, terima kasih penawarannya untuk:`,
+    [`Tujuan     : Cikande -> ${l.kota}`,
+     `Distributor: ${l.customer}`,
+     `Tipe       : ${l.tipeMobil}`,
+     `Tgl muat   : ${l.tanggalMuat || l.tanggal || '-'}`].join('\n'),
+    [`Penawaran Anda    : ${formatRupiah(b.harga)}`,
+     `*Kami mengharapkan : ${formatRupiah(minta)}*`].join('\n'),
+    catatan,
+    `Apakah harga tersebut bisa? Kalau bisa, mohon perbarui harganya lewat link lelang.\nTerima kasih.`
+  ].filter(x => x);
+  const teks = bagian.join('\n\n');
+
+  const el = document.getElementById('btn-nego-wa');
+  el.href = `https://wa.me/${eks.wa}?text=${encodeURIComponent(teks)}`;
+  setStatus(`Permintaan nego ke ${ekspedisi}: ${formatRupiah(minta)}. Setelah mereka memperbarui harga, tekan Segarkan.`);
+  tutupNego();
+  return true;
+}
+
+/* ---------- combo ---------- */
+async function gabungCombo(){
+  const ids = Array.from(terpilih);
+  if(ids.length < 2){ setStatus('Pilih minimal 2 lelang untuk digabung jadi combo.', true); return; }
+
+  const kota = ids.map(id => {
+    const l = lelangList.find(x => x.id === id);
+    return l ? `${l.kota} (${l.tipeMobil})` : id;
+  });
+
+  if(!confirm(`Gabung ${ids.length} lelang jadi satu combo?\n\n${kota.join('\n')}\n\n` +
+              `Ekspedisi akan melihatnya sebagai satu kartu dan mengisi harga per tujuan ` +
+              `yang sudah termasuk potongan combo.\n\nCombo tidak punya pembanding rank 1.`)) return;
+
+  try{
+    setStatus('Menggabungkan…');
+    const r = await gas({action:'combo_buat', ids: ids.join(',')});
+    terpilih.clear();
+    await muat(true);
+    setStatus(`${r.jumlah} lelang digabung jadi satu combo.`);
+  }catch(err){ setStatus('Gagal menggabung: ' + err.message, true); }
+}
+
+async function bubarkanCombo(comboId){
+  if(!confirm('Bubarkan combo ini?\n\nTiap tujuan kembali jadi lelang terpisah dengan pembanding rank 1 masing-masing.')) return;
+  try{
+    setStatus('Membubarkan combo…');
+    const r = await gas({action:'combo_bubar', combo: comboId});
+    await muat(true);
+    setStatus(`Combo dibubarkan — ${r.dibubarkan} lelang kembali terpisah.`);
+  }catch(err){ setStatus('Gagal membubarkan: ' + err.message, true); }
+}
+
+/* pilih pemenang untuk seluruh tujuan dalam satu combo sekaligus */
+async function pilihPemenangCombo(comboId, ekspedisi){
+  const anggota = lelangList.filter(l => l.combo === comboId);
+  const rinci = anggota.map(l => {
+    const b = bidsUntuk(l.id).find(x => x.ekspedisi === ekspedisi);
+    return `${l.kota} — ${b ? formatRupiah(b.harga) : '(belum ada harga)'}`;
+  });
+  const total = anggota.reduce((a,l) => {
+    const b = bidsUntuk(l.id).find(x => x.ekspedisi === ekspedisi);
+    return a + (b ? b.harga : 0);
+  }, 0);
+
+  if(!confirm(`Pilih ${ekspedisi} untuk seluruh combo?\n\n${rinci.join('\n')}\n\nTotal: ${formatRupiah(total)}`)) return;
+
+  try{
+    for(let i = 0; i < anggota.length; i++){
+      setStatus(`Menyimpan pemenang ${i+1} dari ${anggota.length}…`);
+      await gas({action:'pilih_pemenang', idLelang: anggota[i].id, pemenang: ekspedisi,
+                 tanggalMuat: '', alasan: 'bagian dari combo'});
+      const l = lelangList.find(x => x.id === anggota[i].id);
+      if(l){ l.status = 'selesai'; l.pemenang = ekspedisi; }
+      terpilih.delete(anggota[i].id);
+    }
+    render();
+    await muat(true);
+    setStatus(`${ekspedisi} dipilih untuk ${anggota.length} tujuan dalam combo. Buat ordernya di tab Kiriman.`);
+  }catch(err){ setStatus('Gagal simpan pemenang combo: ' + err.message, true); }
+}
+
+function gantiTabAdmin(t){
+  tabAdmin = t;
+  ['lelang','kiriman'].forEach(k => { const a = document.getElementById('m-' + k); if(a) a.classList.toggle('aktif', k === t); });
+  { const b = document.getElementById('m-beranda'); if(b) b.classList.remove('aktif'); }
+  document.getElementById('tab-isi-lelang').classList.toggle('sembunyi', t !== 'lelang');
+  document.getElementById('tab-isi-kiriman').classList.toggle('sembunyi', t !== 'kiriman');
+  document.getElementById('t-lelang').className  = t === 'lelang'  ? 'aktif' : '';
+  document.getElementById('t-kiriman').className = t === 'kiriman' ? 'aktif' : '';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function render(){
+
+  const grid = document.getElementById('grid');
+  const semuaTerbuka = lelangList.filter(l => l.status !== 'selesai');
+  let terbuka = kotaPilih ? semuaTerbuka.filter(l => l.kota === kotaPilih) : semuaTerbuka;
+  terbuka = tujuanPilih ? terbuka.filter(l => namaTujuan(l) === tujuanPilih) : terbuka;
+  /* v113b: cari + saringan pil */
+  const kini0 = Date.now();
+  const sudahTutupL = l => l.batasWaktu && l.batasWaktu - kini0 <= 0;
+  const termurahL = l => { const b = bidsUntuk(l.id); return b.length ? b[0].harga : 0; };
+  const targetL = l => l.target || l.rateExisting || 0;
+  const diAtasTarget = l => termurahL(l) && targetL(l) && termurahL(l) > targetL(l);
+  { const q = String(cariAdmin || '').trim().toLowerCase();
+    if(q) terbuka = terbuka.filter(l => [l.kota, l.customer, l.tipeMobil, l.id, l.noOrder]
+      .concat(bidsUntuk(l.id).map(b => b.ekspedisi)).join(' ').toLowerCase().includes(q)); }
+  const nTutup = terbuka.filter(sudahTutupL).length, nAtas = terbuka.filter(diAtasTarget).length;
+  { const f = document.getElementById('filter-lelang');
+    if(f) f.innerHTML = `<button class="chip ${filterLelang===''?'on':''}" onclick="filterLelang='';render()">Semua · ${terbuka.length}</button>
+      <button class="chip ${filterLelang==='tutup'?'on':''}" onclick="filterLelang='tutup';render()">Sudah tutup · ${nTutup}</button>
+      <button class="chip ${filterLelang==='atas'?'on':''}" onclick="filterLelang='atas';render()">Di atas target · ${nAtas}</button>`; }
+  if(filterLelang === 'tutup') terbuka = terbuka.filter(sudahTutupL);
+  if(filterLelang === 'atas') terbuka = terbuka.filter(diAtasTarget);
+  document.getElementById('jumlah-lelang').textContent =
+    (kotaPilih || tujuanPilih)
+      ? `${terbuka.length} di ${tujuanPilih || kotaPilih} · ${semuaTerbuka.length} total`
+      : `${terbuka.length} aktif`;
+
+  { /* angka di tab */
+    const selesaiN = lelangList.filter(l => l.status === 'selesai').length;
+    const tanpaOrder = lelangList.filter(l =>
+      l.status === 'selesai' && orderUntuk(l.id).filter(o => o.status !== 'batal').length === 0).length;
+    const el1 = document.getElementById('hit-lelang');
+    const el2 = document.getElementById('hit-kiriman');
+    if(el1) el1.textContent = terbuka.length;
+    if(el2){
+      el2.textContent = selesaiN;
+      el2.title = tanpaOrder ? `${tanpaOrder} lelang belum dibuatkan order` : '';
+      el2.classList.toggle('perlu', tanpaOrder > 0);
+    }
+  }
+
+  /* kotak pilihan kota, disisipkan tepat di atas daftar kartu */
+  { const lamaK = document.getElementById('bar-kota-lelang');
+    if(lamaK) lamaK.remove();
+    const htmlK = barisKotaLelang(semuaTerbuka);
+    if(htmlK){
+      const wadah = document.createElement('div');
+      wadah.id = 'bar-kota-lelang';
+      wadah.innerHTML = htmlK;
+      grid.parentNode.insertBefore(wadah, grid);
+    } }
+
+  /* kotak pilihan tujuan — dibangun dari lelang yang sudah tersaring kota,
+     supaya daftarnya menyesuaikan kalau kota sudah dipilih lebih dulu */
+  { const lamaT = document.getElementById('bar-tujuan-lelang');
+    if(lamaT) lamaT.remove();
+    const dasarTujuan = kotaPilih ? semuaTerbuka.filter(l => l.kota === kotaPilih) : semuaTerbuka;
+    const htmlT = barisTujuanLelang(dasarTujuan);
+    if(htmlT){
+      const wadah2 = document.createElement('div');
+      wadah2.id = 'bar-tujuan-lelang';
+      wadah2.innerHTML = htmlT;
+      grid.parentNode.insertBefore(wadah2, grid);
+    } }
+
+  grid.innerHTML = terbuka.length === 0
+    ? `<div class="empty">${(tujuanPilih || kotaPilih || cariAdmin || filterLelang) ? 'Tidak ada lelang terbuka di pilihan ini.' : 'Belum ada lelang terbuka saat ini.'}</div>`
+    : `<div class="tabel-lelang-wadah"><table class="tabel-lelang">
+        <thead><tr><th class="lb-cek"></th><th>Tujuan</th><th>Tipe</th><th>Muat</th><th>Tutup</th><th>Penawar</th>
+          <th class="kanan">Termurah</th><th class="kanan">Target</th><th><span class="sr">Aksi</span></th></tr></thead>` + terbuka.map(l=>{
+        const bids = bidsUntuk(l.id);
+        const lewat = l.batasWaktu - Date.now() <= 0;
+        const rows = bids.length === 0
+          ? `<tr><td colspan="6" class="empty">Belum ada ekspedisi yang mengisi harga.</td></tr>`
+          : bids.map((b,i)=>{
+              const juara = l.juaraBertahan &&
+                b.ekspedisi.toUpperCase() === String(l.juaraBertahan).toUpperCase();
+              const menantang = !juara && l.juaraBertahan && l.hargaKunci && b.harga < l.hargaKunci;
+              return `<tr class="${i===0?'termurah':''} ${juara?'baris-juara':''}">
+              <td>${b.ekspedisi}${i===0?'<span class="badge-termurah">TERMURAH</span>':''}${
+                juara?'<span class="pil-juara">TERKUNCI</span>':''}${
+                menantang?'<span class="pil-menantang">MENANTANG</span>':''}</td>
+              <td class="harga">${formatRupiah(b.harga)}${
+                juara && l.hargaKunci && b.harga !== l.hargaKunci
+                  ? `<br><span class="beda-kunci">${b.harga > l.hargaKunci ? 'naik' : 'turun'} ${formatRupiah(Math.abs(b.harga - l.hargaKunci))}</span>`
+                  : ''}${
+                b.alasanNaik ? `<br><span class="alasan-naik">${b.alasanNaik}</span>` : ''}</td>
+              <td>${b.etd||'-'}</td><td>${b.eta||'-'}</td><td>${b.namaKapal||'-'}</td>
+              <td class="aksi-bid">
+                <button class="btn-nego" onclick="bukaNego('${l.id}','${b.ekspedisi}')" title="minta harga lebih baik">Nego</button>
+                ${l.combo
+                  ? `<button class="btn-pilih" onclick="pilihPemenangCombo('${l.combo}','${b.ekspedisi}')" title="berlaku untuk semua tujuan dalam combo">Pilih Combo</button>`
+                  : `<button class="btn-pilih" onclick="pilihPemenang('${l.id}','${b.ekspedisi}')">Pilih Ini</button>`}
+              </td>
+            </tr>`;
+            }).join('');
+
+        let ratePanel = '';
+        if(!l.rateExisting){
+          const rapi = t => String(t||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+          const kNorm = rapi(l.kota), tNorm = rapi(l.tipeMobil);
+          const adaKota = (rateInfo.kota || []).indexOf(kNorm) > -1;
+
+          let alasan;
+          if(rateInfo.jumlah === 0){
+            alasan = 'tab Rate masih kosong';
+          } else if(!adaKota){
+            alasan = `belum ada baris Rate untuk kota "${l.kota}"`;
+          } else {
+            // kotanya ada — tunjukkan tipe apa saja yang tersedia untuk kota itu
+            const tipeAda = (rateInfo.pasangan || [])
+              .filter(x => x.split('::')[0].split('|')[0] === kNorm)
+              .map(x => x.split('::')[1]);
+            alasan = `ada rate untuk "${l.kota}" tapi tipe mobilnya ${tipeAda.length ? tipeAda.map(x=>`"${x}"`).join(' / ') : '(kosong)'}, sedangkan lelang ini "${l.tipeMobil}"`;
+          }
+          ratePanel = `<div class="rate-panel rate-kosong">Target Rate UNIFAM belum ketemu — ${alasan}</div>`;
+        }
+        if(l.rateExisting){
+          const target = l.target || l.rateExisting;
+          let selisih = '';
+          if(bids.length){
+            const beda = target - bids[0].harga;
+            selisih = beda > 0
+              ? `<span class="hemat">hemat ${formatRupiah(beda)}</span>`
+              : beda < 0
+                ? `<span class="lebih">lebih mahal ${formatRupiah(-beda)}</span>`
+                : `<span>pas di target</span>`;
+          }
+          ratePanel = `<div class="rate-panel">Target Rate UNIFAM: <b>${formatRupiah(target)}</b> ${selisih}<br><span style="font-size:10.5px;">${l.target && l.target < hitungTargetLokal(l.rateExisting) ? 'turun dari penawaran lelang sebelumnya · ' : ''}rank 1 ${formatRupiah(l.rateExisting)}${l.asalRate ? ' (' + l.asalRate + ')' : ''} dipotong 3% lalu dibulatkan ke atas kelipatan 50 ribu</span></div>`;
+        }
+
+        const kartuRinci = `<div class="card">
+          <div class="card-head dengan-cek">
+            <div class="punggung">
+              <span class="kode">${l.kota}</span>
+            </div>
+            <div class="kepala-isi">
+              <div class="route"><span class="dari">Cikande</span><span class="arrow">→</span>${l.kota}</div>
+              <div class="meta">${l.customer} · ${l.tipeMobil}<br>${l.tanggal} · ${bids.length} ekspedisi mengisi</div>
+              ${l.alamat ? `<div class="alamat-box"><b>Alamat:</b> ${l.alamat}</div>` : '<div class="alamat-box">Alamat belum ketemu di tab Alamat</div>'}
+            </div>
+            <div class="deadline-tag ${lewat?'lewat':''}">${lewat
+              ? `sudah tutup<br>${tanggalTutup(l.batasWaktu)}`
+              : `tutup ${tanggalTutup(l.batasWaktu)}<br>${formatJam(l.batasWaktu)}`}</div>
+          </div>
+          <div class="card-body">
+            ${ratePanel}
+            ${panelPemenangSebelumnya(l)}
+            ${lewat ? `<div class="kotak-tutup">
+              <div class="kt-teks">
+                <b>Lelang sudah tutup</b>
+                Ekspedisi tidak bisa lagi mengisi harga. Penawaran yang sudah masuk tetap ada,
+                dan kamu tetap bisa memilih pemenang. Perpanjang kalau mau dibuka lagi.
+              </div>
+              <div class="kt-isian">
+                <div><label>Tutup baru</label><input id="pjg-tgl-${l.id}" type="date" value="${sokISO(new Date(Date.now()+86400000))}"></div>
+                <div><label>Pukul</label><input id="pjg-jam-${l.id}" type="time" value="12:00"></div>
+                <button class="btn-buka" onclick="perpanjang('${l.id}')">Buka lagi</button>
+              </div>
+            </div>` : ''}
+            <div class="muat-input">
+              <label for="muat-${l.id}">Tanggal muat / pick up</label>
+              <input id="muat-${l.id}" type="date" value="${keISO(l.tanggalMuat || l.tanggal)}">
+            </div>
+            <table class="bidtable">
+              <thead><tr><th>Ekspedisi</th><th>Penawaran</th><th>ETD</th><th>ETA</th><th>Kapal</th><th></th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>`;
+
+        /* baris ringkas seperti contoh tampilan; rincian (penawaran, pilih pemenang) dibuka di bawahnya */
+        const buka = lelangBuka.has(l.id);
+        const sisa = l.batasWaktu - Date.now();
+        const tutupTeks = lewat ? '<span class="pil-st hijau">tutup</span>'
+          : sisa < 6*3600e3 ? `<span class="pil-st merah">${Math.floor(sisa/3600e3)}j ${Math.floor(sisa%3600e3/60e3)}m</span>`
+          : `<span class="mono kecil">${tanggalTutup(l.batasWaktu)}</span>`;
+        const target = l.target || l.rateExisting || 0;
+        const murah = bids.length ? bids[0] : null;
+        const beda = (murah && target) ? murah.harga - target : null;
+        const rb = n => (n/1000 >= 1000 ? (n/1e6).toLocaleString('id-ID',{maximumFractionDigits:2}) + ' jt' : Math.round(n/1000).toLocaleString('id-ID') + ' rb');
+        return `<tbody class="lb ${buka ? 'buka' : ''} ${terpilih.has(l.id) ? 'dipilih' : ''}">
+          <tr class="lb-baris" onclick="if(!event.target.closest('input,button,a'))bukaLelang('${l.id}')">
+            <td class="lb-cek"><input type="checkbox" class="cek" ${terpilih.has(l.id) ? 'checked' : ''}
+                 onchange="togglePilih('${l.id}', this)" aria-label="pilih ${l.kota}"></td>
+            <td><div class="lb-kota">${l.kota}${l.combo ? ' <span class="pil-st biru">combo</span>' : ''}</div><div class="lb-sub">${l.customer}</div></td>
+            <td><span class="pil-tipe">${l.tipeMobil}</span></td>
+            <td class="mono kecil">${l.tanggalMuat || l.tanggal || '—'}</td>
+            <td>${tutupTeks}</td>
+            <td class="mono">${bids.length}</td>
+            <td class="kanan">${murah ? `<div class="mono tebal">${formatRupiah(murah.harga).replace('Rp ','')}</div><div class="lb-sub">${murah.ekspedisi}</div>` : '<span class="lb-sub">belum ada</span>'}</td>
+            <td class="kanan">${target ? `<div class="mono">${formatRupiah(target).replace('Rp ','')}</div>${beda === null ? '' :
+                `<div class="lb-beda ${beda > 0 ? 'merah' : beda < 0 ? 'hijau' : ''}">${beda > 0 ? '+' : beda < 0 ? '−' : ''}${beda ? rb(Math.abs(beda)) : 'pas'}</div>`}` : '<span class="lb-sub">—</span>'}</td>
+            <td class="kanan"><button class="${lewat && bids.length ? 'btn-lb utama' : 'btn-lb'}" onclick="bukaLelang('${l.id}')">${buka ? 'Tutup' : lewat && bids.length ? 'Pilih pemenang' : 'Lihat penawaran'}</button></td>
+          </tr>
+          <tr class="lb-rinci"><td colspan="9">${buka ? kartuRinci : ''}</td></tr>
+        </tbody>`;
+      }).join('') + `</table></div>`;
+
+  const selesai = lelangList.filter(l => l.status === 'selesai');
+
+  /* kalau satu tanggal dipilih, tampilkan daftar rata lintas lelang */
+  if(tglPilih || kotaPilihK){
+    document.getElementById('riwayat-wrap').innerHTML = barisTanggal() + tabelPerTanggal();
+    return;
+  }
+
+  document.getElementById('riwayat-wrap').innerHTML = barisTanggal() + `
+    <div class="section-title"><h2>Kiriman &amp; Order</h2>
+      <small>${selesai.length} lelang sudah ada pemenangnya · ${daftarOrder.length} order dibuat${(() => {
+        const n = selesai.filter(l => orderUntuk(l.id).filter(o => o.status !== 'batal').length === 0).length;
+        return n ? ` · <b style="color:#8A5A0A;">${n} belum dibuatkan order</b>` : '';
+      })()}</small></div>
+    <div class="grid">${selesai.length === 0 ? '<div class="empty">Belum ada.</div>' : selesai.map(l=>{
+      const win = bidsUntuk(l.id).find(b => b.ekspedisi === l.pemenang);
+      const eks = daftarEkspedisi.find(e => e.nama.toUpperCase() === (l.pemenang||'').toUpperCase());
+      const orders = orderUntuk(l.id);
+      const aktif = orders.filter(o => o.status !== 'batal');
+      const rencana = String(l.tanggalSemua || '').split(',').map(x=>x.trim()).filter(x=>x);
+      const belumDipakai = rencana.filter(t => !orders.some(o => o.tanggalMuat === t));
+
+      const barisOrder = orders.map(o => {
+        const k = konfirmasiList.find(x => x.idLelang === o.id);
+        const sudah = !!k;
+
+        /* baris rincian: hanya muncul kalau ekspedisi sudah mengisi konfirmasi */
+        const rinci = sudah ? `<tr class="baris-rinci"><td colspan="6">
+          <div class="rinci-kisi">
+            ${k.namaDriver ? `<div><span class="rl">Sopir</span><span class="rv">${k.namaDriver}</span></div>` : ''}
+            ${k.hpDriver   ? `<div><span class="rl">No HP</span><span class="rv mono">${k.hpDriver}</span></div>` : ''}
+            ${k.noPolisi   ? `<div><span class="rl">No Polisi</span><span class="rv mono">${k.noPolisi}</span></div>` : ''}
+            ${k.noKontener ? `<div><span class="rl">No Kontener</span><span class="rv mono">${k.noKontener}</span></div>` : ''}
+            ${k.namaKapal  ? `<div><span class="rl">Kapal</span><span class="rv">${k.namaKapal}</span></div>` : ''}
+            ${k.etd        ? `<div><span class="rl">ETD</span><span class="rv mono">${k.etd}</span></div>` : ''}
+            ${k.eta        ? `<div><span class="rl">ETA</span><span class="rv mono">${k.eta}</span></div>` : ''}
+            ${k.jamTiba    ? `<div><span class="rl">Est. tiba</span><span class="rv mono">${k.jamTiba}</span></div>` : ''}
+          </div>
+          ${k.catatan ? `<div class="rinci-catatan">Catatan: ${k.catatan}</div>` : ''}
+          <div class="rinci-waktu">dikonfirmasi ${k.waktu ? new Date(k.waktu).toLocaleString('id-ID') : '-'}</div>
+        </td></tr>` : '';
+
+        const batal = o.status === 'batal';
+        return `<tr class="${batal ? 'baris-batal' : ''}">
+          <td>${batal ? '' : `<input type="checkbox" class="cek-order"
+              ${terpilihOrder.has(o.id) ? 'checked' : ''}
+              onchange="togglePilihOrder('${o.id}', this)" title="pilih untuk digabung combo">`}</td>
+          <td class="mono">${o.noOrder}${labelComboOrder(o)}</td>
+          <td class="mono">${o.tanggalMuat}</td>
+          <td class="mono">${k && k.noKontener ? k.noKontener : (k && k.noPolisi ? k.noPolisi : '—')}</td>
+          <td>${batal
+              ? `<span class="pil-batal" title="${o.alasanBatal || ''}">Dibatalkan</span>`
+              : sudah
+                ? `<span class="pil-ok">Sudah konfirmasi</span>`
+                : `<span class="pil-nunggu">Menunggu</span>`}</td>
+          <td class="kanan">
+            ${eks && !sudah && !batal
+              ? `<a class="tautan-kecil" target="_blank" href="${waKonfirmasiOrder(l, o, eks)}">kirim WA</a>`
+              : ''}
+            ${(o.ekspedisi || l.pemenang) ? `<a class="tautan-kecil" target="_blank" href="${linkSpkOrder(o, o.ekspedisi || l.pemenang)}" title="dokumen SPK / bukti harga">SPK</a>` : ''}
+            ${batal ? '' : o.caraLama
+              ? `<span class="cap-lama" title="dibuat sebelum ada tab Order">lama</span>`
+              : `<button class="btn-mini" title="geser tanggal muat"
+                   onclick="geserTanggal('${o.id}','${o.noOrder}','${o.tanggalMuat}')">tgl</button>
+                 <button class="btn-mini" title="ubah harga order ini"
+                   onclick="ubahHargaOrder('${o.id}','${o.noOrder}',${o.harga || 0})">harga</button>
+                 <button class="btn-mini merah" title="batalkan order"
+                   onclick="batalOrder('${o.id}','${o.noOrder}','${l.kota}')">batal</button>`}
+          </td>
+        </tr>${rinci}`;
+      }).join('');
+
+      const panelOrder = `<div class="panel-order">
+        <div class="po-kop">
+          <span class="po-jdl">Kiriman</span>
+          <span class="po-ket">${aktif.length} order aktif${orders.length > aktif.length ? ' · ' + (orders.length - aktif.length) + ' dibatalkan' : ''}${
+            belumDipakai.length ? ` · rencana belum dipakai: ${belumDipakai.join(', ')}` : ''}</span>
+        </div>
+        ${orders.length === 0
+          ? `<div class="tanpa-order">
+               <b>Belum ada order</b>
+               Pemenang sudah dipilih, tapi <b>No Order belum dibuat</b> — jadi belum masuk
+               ke Pesanan Armada dan link konfirmasi belum bisa dikirim.
+               Tekan tombol di bawah, boleh lebih dari sekali kalau kirimannya beberapa kali.
+               <div class="po-kosong" style="margin-top:9px;">
+                 Sudah pesan LANGSUNG di Pesanan Armada, di luar tombol ini?
+                 <a href="#" onclick="event.preventDefault();ubahHargaLelang('${l.id}','${l.kota}',
+                   ${(function(){ const bb=bidsUntuk(l.id).find(x=>x.ekspedisi===l.pemenang);
+                     return l.hargaFinal || (bb?bb.harga:0) || 0; })()})">Ubah harga di sini</a>
+                 supaya Rincian &amp; Realisasi ikut benar.
+               </div>
+             </div>`
+          : `<table class="tabel-order">
+               <thead><tr><th></th><th>No Order</th><th>Tgl Muat</th><th>Kontener / Polisi</th>
+                 <th>Status</th><th></th></tr></thead>
+               <tbody>${barisOrder}</tbody>
+             </table>`}
+        ${l.approval === 'MENUNGGU'
+          ? `<button class="btn-order" disabled title="tunggu approval dulu">Menunggu approval — order belum bisa dibuat</button>`
+          : `<button class="btn-order" onclick="buatOrder('${l.id}')">+ Buat order baru</button>`}
+        ${!eks ? `<div class="po-kosong">Nomor WA ${l.pemenang || '—'} belum terdaftar — lengkapi di Daftar Ekspedisi supaya link konfirmasi bisa dikirim.</div>` : ''}
+      </div>`;
+
+      const tombolBatal = `<button class="btn-batal-menang" onclick="batalPemenang('${l.id}','${(l.pemenang||'').replace(/'/g,"\\'")}','')">Batalkan / ganti pemenang</button>`;
+      /* v110: alihkan ke peringkat berikutnya (mis. jadwal kapal pemenang tidak cocok) */
+      const adaCadangan = bidsUntuk(l.id).some(b => b.ekspedisi !== l.pemenang);
+      const tombolAlih = adaCadangan && !l.combo
+        ? `<button class="btn-alih" onclick="bukaAlihkan('${l.id}')">Pemenang tidak bisa support? Alihkan ke peringkat berikutnya</button>` : '';
+      const blokAcc = l.approval === 'MENUNGGU' ? blokTungguApproval(l)
+        : (String(l.approval || '').indexOf('OK') === 0 ? `<div class="acc-ok">✓ Pengalihan disetujui — ${l.approval.slice(3)}</div>` : '');
+
+      return `<div class="card">
+        <div class="card-head dengan-cek">
+        <div class="punggung tutup">
+          <input type="checkbox" class="cek" ${terpilih.has(l.id) ? 'checked' : ''}
+                 onchange="togglePilih('${l.id}', this)" title="pilih untuk dihapus">
+          <span class="kode">${l.kota}</span>
+        </div>
+        <div class="kepala-isi">
+          <div class="route"><span class="dari">Cikande</span><span class="arrow">→</span>${l.kota}</div>
+          <div class="meta">${l.customer} · ${l.tipeMobil} · minggu ${l.tanggal}</div>
+        </div>
+        <div class="deadline-tag">${orders.length} kiriman</div>
+        </div>
+        <div class="card-body">
+          <div class="pemenang-banner">🏆 ${l.pemenang || '—'}${win ? ' · ' + formatRupiah(win.harga) + ' /unit' : ''}</div>
+          ${blokAcc}
+          ${panelOrder}
+          ${tombolAlih}
+          ${tombolBatal}
+        </div></div>`;
+    }).join('')}</div>`;
+}
+
+isiDefaultTutup();
+setInterval(hitungTutup, 30000);
+muat();
+/* Muat ulang hanya kalau halaman sedang dilihat — menghemat waktu tunggu
+   dan mengurangi beban server saat tab dibiarkan terbuka di latar. */
+setInterval(() => { if(!document.hidden) muat(); }, 90000);
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden && ambilPassAdmin()) muat();
+});
+</script>
+</body>
+</html>
